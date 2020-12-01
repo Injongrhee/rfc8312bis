@@ -6,9 +6,9 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 29 May 2021                                      L. Eggert, Ed.
+Expires: 4 June 2021                                      L. Eggert, Ed.
                                                                   NetApp
-                                                        25 November 2020
+                                                         1 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 May 2021.
+   This Internet-Draft will expire on 4 June 2021.
 
 Copyright Notice
 
@@ -407,8 +407,11 @@ Table of Contents
    W_est is set equal to cwnd at the start of the congestion avoidance
    stage.  After that, on every ACK, W_est is updated using Eq. 4.
 
-       W_est = W_est + [3 * (1 - beta_cubic) / (1 + beta_cubic)] *
-                (segments_acked / cwnd)                  (Eq. 4)
+       W_est = W_est + alpha_aimd * (segments_acked / cwnd) (Eq. 4)
+
+   Note that once W_est reaches W_max, that is, W_est >= W_max,
+   alpha_aimd SHOULD be set to 1 to achieve the same congestion window
+   size as standard TCP that uses AIMD.
 
 4.4.  Concave Region
 
@@ -864,6 +867,8 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
       #14)
 
    *  update W_est to use AIMD approach (#20)
+
+   *  set alpha_aimd to 1 once W_est reaches W_max (#2)
 
 B.2.  Since RFC8312
 
