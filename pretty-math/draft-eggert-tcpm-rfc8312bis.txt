@@ -395,9 +395,12 @@ cwnd                          & \text{if } \mathrm{W_{cubic}}(t + RTT) < cwnd \\
    multiplicative factor of β_(aimd), denoted by AIMD(α_(aimd),
    β_(aimd)).  Specifically, the average congestion window size of
    AIMD(α_(aimd), β_(aimd)) can be calculated using Figure 3.  The
-   analysis shows that AIMD(α_(aimd), β_(aimd)) with α_(aimd)=3 * (1 -
-   β_(aimd)) / (1 + β_(aimd)) achieves the same average window size as
-   Standard TCP that uses AIMD(1, 0.5).
+   analysis shows that AIMD(α_(aimd), β_(aimd)) with
+
+            α_{aimd} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}}
+
+   achieves the same average window size as Standard TCP that uses
+   AIMD(1, 0.5).
 
     \mathrm{AIMD}(α_{aimd}, β_{aimd}) =
         \sqrt{\frac{α_{aimd} * (1 + β_{aimd})}{2 * (1 - β_{aimd}) * p}}
