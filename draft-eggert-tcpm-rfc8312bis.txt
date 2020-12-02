@@ -6,9 +6,11 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 4 June 2021                                      L. Eggert, Ed.
+Expires: 5 June 2021                                             V. Goel
+                                                              Apple Inc.
+                                                          L. Eggert, Ed.
                                                                   NetApp
-                                                         1 December 2020
+                                                         2 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -55,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 June 2021.
+   This Internet-Draft will expire on 5 June 2021.
 
 Copyright Notice
 
@@ -870,6 +872,8 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
 
    *  set alpha_aimd to 1 once W_est reaches W_max (#2)
 
+   *  add Vidhi as co-author (#17)
+
 B.2.  Since RFC8312
 
    *  converted to markdown and xml2rfc v3
@@ -902,6 +906,15 @@ Authors' Addresses
 
    Email: sangtae.ha@colorado.edu
    URI:   https://netstech.org/sangtaeha/
+
+
+   Vidhi Goel
+   Apple Inc.
+   One Apple Park Way
+   Cupertino, California 95014
+   United States of America
+
+   Email: vidhi_goel@apple.com
 
 
    Lars Eggert (editor)
