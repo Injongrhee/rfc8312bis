@@ -360,12 +360,15 @@ Table of Contents
    rate is non-decreasing and is less than the increase rate of slow
    start.
 
-target = \left\{
-\begin{array}{ll}
-cwnd                          & \text{if } \mathrm{W_{cubic}}(t + RTT) < cwnd \\
-1.5 * cwnd                    & \text{if } \mathrm{W_{cubic}}(t + RTT) > 1.5 * cwnd \\
-\mathrm{W_{cubic}}(t + RTT)   & \text{otherwise} \\
-\end{array} \right.
+          target = \left\{
+          \begin{array}{ll}
+          cwnd                          &
+          \text{if } \mathrm{W_{cubic}}(t + RTT) < cwnd \\
+          1.5 * cwnd                    &
+          \text{if } \mathrm{W_{cubic}}(t + RTT) > 1.5 * cwnd \\
+          \mathrm{W_{cubic}}(t + RTT)   &
+          \text{otherwise} \\
+          \end{array} \right.
 
    Depending on the value of the current congestion window size cwnd,
    CUBIC runs in three different modes.
@@ -468,11 +471,14 @@ cwnd                          & \text{if } \mathrm{W_{cubic}}(t + RTT) < cwnd \\
    cwnd, and ssthresh as follows.  Parameter β_(cubic) SHOULD be set to
    0.7.
 
-\begin{array}{ll}
-W_{max} = cwnd & \text{// save cwnd before reduction} \\
-ssthresh = \mathrm{max}(cwnd * β_{cubic}, 2) & \text{// new ssthresh (at least 2 MSS)} \\
-cwnd = ssthresh & \text{// window reduction} \\
-\end{array}
+              \begin{array}{ll}
+              W_{max} = cwnd &
+              \text{// save cwnd before reduction} \\
+              ssthresh = \mathrm{max}(cwnd * β_{cubic}, 2) &
+              \text{// new ssthresh (at least 2 MSS)} \\
+              cwnd = ssthresh &
+              \text{// window reduction} \\
+              \end{array}
 
    A side effect of setting β_(cubic) to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
@@ -495,11 +501,13 @@ cwnd = ssthresh & \text{// window reduction} \\
    value of W_(max) before it updates W_(max) for the current congestion
    event.  Let us call the last value of W_(max) to be W_(last_max).
 
-\left<W_{last\_max}, W_{max}\right> = \left\{
-\begin{array}{ll}
-\left<W_{max}, W_{max} * \frac{1 + β_{cubic}}{2}\right>  & \text{if } W_{max} < W_{last\_max} \\
-\left<W_{max}, W_{max}\right>                            &\text{otherwise} \\
-\end{array} \right.
+          \left<W_{last\_max}, W_{max}\right> = \left\{
+          \begin{array}{ll}
+          \left<W_{max}, W_{max} * \frac{1 + β_{cubic}}{2}\right>
+          & \text{if } W_{max} < W_{last\_max} \\
+          \left<W_{max}, W_{max}\right>
+          &\text{otherwise} \\
+          \end{array} \right.
 
    At a congestion event, if the current value of W_(max) is less than
    W_(last_max), this indicates that the saturation point experienced by
