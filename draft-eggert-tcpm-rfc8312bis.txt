@@ -6,11 +6,11 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 5 June 2021                                             V. Goel
+Expires: 7 June 2021                                             V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         2 December 2020
+                                                         4 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 June 2021.
+   This Internet-Draft will expire on 7 June 2021.
 
 Copyright Notice
 
@@ -444,9 +444,12 @@ Table of Contents
 4.6.  Multiplicative Decrease
 
    When a packet loss is detected by duplicate ACKs or a network
-   congestion is detected by ECN-Echo ACKs, CUBIC updates its W_max,
-   cwnd, and ssthresh as follows.  Parameter beta_cubic SHOULD be set to
-   0.7.
+   congestion is detected by receiving packets marked with ECN-Echo
+   (ECE), CUBIC updates its W_max and reduces its cwnd and ssthresh
+   immediately as below.  For both packet loss and congestion detection
+   through ECN, the sender MAY employ a fast recovery algorithm to
+   gradually adjust the congestion window to its new reduced value.
+   Parameter beta_cubic SHOULD be set to 0.7.
 
        W_max = cwnd                 // save window size before reduction
        ssthresh = cwnd * beta_cubic // new slow-start threshold
@@ -873,6 +876,9 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
    *  set alpha_aimd to 1 once W_est reaches W_max (#2)
 
    *  add Vidhi as co-author (#17)
+
+   *  note for fast recovery during cwnd decrease due to congestion
+      event (#11)
 
 B.2.  Since RFC8312
 
