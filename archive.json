@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-03T00:02:33.658615+00:00",
+  "timestamp": "2020-12-06T00:04:12.089235+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -784,7 +784,7 @@
       "id": "MDU6SXNzdWU3NDQ0MzQ0MzQ=",
       "title": "Add details about response to ECN marks",
       "url": "https://github.com/NTAP/rfc8312bis/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mohittahiliani",
       "authorAssociation": "NONE",
       "assignees": [
@@ -795,8 +795,8 @@
       ],
       "body": "It would be nice to describe how a CUBIC sender should respond to ECN marks from the receiver. On receiving an ECE mark, the Linux CUBIC enters a CWR state and follows PRR.\r\n\r\nMore details about this are available in the document:\r\nhttps://docs.google.com/document/d/1QiDqBo94wKr1eptTFe6xAB0RWWlwYOy8VLOWrpVAie8/edit",
       "createdAt": "2020-11-17T05:52:58Z",
-      "updatedAt": "2020-12-02T18:16:41Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-04T08:41:15Z",
+      "closedAt": "2020-12-04T08:41:15Z",
       "comments": [
         {
           "author": "sangtaeha",
@@ -867,6 +867,13 @@
           "body": "This is not the same thing, but it also fits the topic line: reference [KWAF17] in RFC 8312 is an I-D but it is now RFC 8511, and it's not cited for what it really is about in RFC 8312. RFC 8511 proposes that senders should back off less in response to a CE-mark (note, this is in the world of ECT(0) ) than to a packet loss, because the CE-mark not only indicates congestion - it also indicates the presence of an AQM algorithm, which probably keeps the queue relatively short.\r\n\r\nWe found this to be generally beneficial, some details here:  https://folk.universitetetioslo.no/michawe/research/publications/Networking2017ABE.pdf\r\nand recommend a value of 0.85 for cubic_beta in the RFC, for whoever wants to participate in this experiment.\r\n\r\nI'm not saying that Cubic should now change its backoff factor for good, but the experiment should probably be cited as such, and the reference updated - and if one of you implementers would like to try out a value greater than 0.8, such as 0.85 or 0.8, that would of course be extra cool!",
           "createdAt": "2020-12-02T18:16:41Z",
           "updatedAt": "2020-12-02T18:16:41Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@mwelzl The mention of [KWAF17] in Section 5.4 is to note the aggressiveness of CUBIC in fast networks leading to more queuing in the network. For the CUBIC draft, I think it would be best to provide a generic recommendation instead of pointing to specific RFCs for congestion window reduction during fast recovery.",
+          "createdAt": "2020-12-03T09:29:21Z",
+          "updatedAt": "2020-12-03T09:29:21Z"
         }
       ]
     },
@@ -1332,14 +1339,15 @@
       "state": "OPEN",
       "author": "mwelzl",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "lisongxu"
+      ],
       "labels": [
-        "editorial",
-        "help wanted"
+        "editorial"
       ],
       "body": "This is tiny and editorial:\r\n\r\nSection 4.7 of RFC 8312 talks about how values are initialized after an RTO; it seems obvious that these values would also be used at the very beginning, but this is never explicitly said. It seems obvious that, at this point, W_last_max should be set to W_max, but how to initialize W_last_max is also not explicitly said (unless I missed it).",
       "createdAt": "2020-12-01T08:19:58Z",
-      "updatedAt": "2020-12-02T07:33:22Z",
+      "updatedAt": "2020-12-03T15:22:38Z",
       "closedAt": null,
       "comments": [
         {
@@ -1362,6 +1370,20 @@
           "body": "> Thanks, @mwelzl. W_last_max should be initialized to 0.\r\n> \r\n> By the way, there is a confusing difference between RFC and Linux code: RFC has two variables, W_last_max and W_max, whereas Linux code has only W_last_max that corresponds to W_max in RFC. This is confusing, so I would recommend removing W_last_max from the RFC, as it is used only in Section 4.6.\r\n> \r\n> How about changing paragraphs 2, 3, 4 of Section 4.6 as follows?\r\n> \r\n> _With fast convergence, when a congestion event occurs, we update W_max as follows before the window reduction described in Section 4.5._\r\n> \r\n> ```\r\n>       if (cwnd < W_max){                        // should we make room for others\r\n>           W_max = W_max*(1.0+beta_cubic)/2.0;   // further reduce W_max\r\n>       } else {\r\n>           W_max = cwnd                          // remember cwnd before reduction\r\n>       }\r\n> ```\r\n\r\nThis looks good. One thing to note though, earlier we were saving W_last_max = W_max (before applying fast convergence) and now we won't have that state saved. Instead we would always compare with W_max after fast convergence is applied.\r\n",
           "createdAt": "2020-12-02T07:33:22Z",
           "updatedAt": "2020-12-02T07:33:22Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Anyone willing to create a PR for this one?",
+          "createdAt": "2020-12-03T12:52:51Z",
+          "updatedAt": "2020-12-03T12:52:51Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I can help with this one. ",
+          "createdAt": "2020-12-03T14:39:06Z",
+          "updatedAt": "2020-12-03T14:39:06Z"
         }
       ]
     }
@@ -2649,6 +2671,375 @@
           "body": "Thanks, Vidhi!",
           "createdAt": "2020-12-01T13:54:00Z",
           "updatedAt": "2020-12-01T13:54:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTMxNjQ1ODc2",
+      "title": "add note about fast recovery during cwnd decrease due to congestion",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/29",
+      "state": "MERGED",
+      "author": "goelvidhi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed on #11, I added a note about fast recovery.\r\nPlease let me know if we need to add more details. IMO, we should avoid mentioning any specific fast recovery mechanism.\r\n\r\nCloses #11 ",
+      "createdAt": "2020-12-03T09:45:10Z",
+      "updatedAt": "2020-12-04T08:41:15Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "9b8f58e1ca4fc6b2cdaca4fecfdc688292dbbffb",
+      "headRepository": "goelvidhi/rfc8312bis",
+      "headRefName": "fast-recovery-mention",
+      "headRefOid": "52a1f1f143a076f094ae0a637a1ca4490aac0fd5",
+      "closedAt": "2020-12-04T08:41:15Z",
+      "mergedAt": "2020-12-04T08:41:15Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f"
+      },
+      "comments": [
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert could you please review this PR? Thank you.",
+          "createdAt": "2020-12-04T06:50:26Z",
+          "updatedAt": "2020-12-04T06:50:55Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0MDE3NjE1",
+          "commit": {
+            "abbreviatedOid": "69be5f5"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks, Vidhi!\r\n",
+          "createdAt": "2020-12-03T14:37:48Z",
+          "updatedAt": "2020-12-03T14:37:48Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0MjM5MTU2",
+          "commit": {
+            "abbreviatedOid": "69be5f5"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks!",
+          "createdAt": "2020-12-03T18:08:11Z",
+          "updatedAt": "2020-12-03T18:08:11Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0NzQ0MDI3",
+          "commit": {
+            "abbreviatedOid": "69be5f5"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-12-04T08:26:34Z",
+          "updatedAt": "2020-12-04T08:27:17Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\ncongestion is detected by receiving packets marked with ECN-Echo (ECE), CUBIC updates its W_max\r\n```",
+              "createdAt": "2020-12-04T08:26:34Z",
+              "updatedAt": "2020-12-04T08:36:23Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\npacket loss and congestion detection through ECN, the sender MAY\r\n```",
+              "createdAt": "2020-12-04T08:27:06Z",
+              "updatedAt": "2020-12-04T08:36:23Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0NzUzMDg5",
+          "commit": {
+            "abbreviatedOid": "52a1f1f"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-04T08:40:59Z",
+          "updatedAt": "2020-12-04T08:40:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTMyMzQ1OTkw",
+      "title": "highlight the difference from the original paper and RFC8312",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/30",
+      "state": "OPEN",
+      "author": "sangtaeha",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This includes the list of changes since the original paper. The section headings are similar to the issue logs at the end, so we may clean up at the end. Also, I didn't really install any tool to check this change (markdown and others). So please let me if this doesn't work. This fixes #10.",
+      "createdAt": "2020-12-04T07:21:51Z",
+      "updatedAt": "2020-12-04T23:41:58Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
+      "headRepository": "sangtaeha/rfc8312bis",
+      "headRefName": "highlight-differences",
+      "headRefOid": "0a2276533bdd30613a478f46d2ef91234370ef80",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@goelvidhi @larseggert It complains about the space (it seems I didn't remove the space when I split the sentence) and the reference to Lisong's paper. Can you fix this issue? If not, I will submit a new pull request.",
+          "createdAt": "2020-12-04T07:33:42Z",
+          "updatedAt": "2020-12-04T07:33:42Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am fixing the spaces. Will push soon.",
+          "createdAt": "2020-12-04T07:50:15Z",
+          "updatedAt": "2020-12-04T07:50:15Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @goelvidhi!\r\n ",
+          "createdAt": "2020-12-04T07:51:24Z",
+          "updatedAt": "2020-12-04T07:51:24Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I won't be able to push from your repo. Please find below the patch for spaces and tabs which you can apply using `git apply spaces.patch`\r\n[spaces.patch.zip](https://github.com/NTAP/rfc8312bis/files/5641291/spaces.patch.zip)\r\n",
+          "createdAt": "2020-12-04T08:04:33Z",
+          "updatedAt": "2020-12-04T08:04:33Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@goelvidhi Great! Let me fix it with your patch.",
+          "createdAt": "2020-12-04T08:08:28Z",
+          "updatedAt": "2020-12-04T08:08:28Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am not sure why the editor's copy check is failing. @larseggert can likely help here.",
+          "createdAt": "2020-12-04T08:19:35Z",
+          "updatedAt": "2020-12-04T08:19:35Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@goelvidhi Lisong's paper through DOI doesn't work. I think I may manually add that paper there like other papers.",
+          "createdAt": "2020-12-04T08:21:22Z",
+          "updatedAt": "2020-12-04T08:21:22Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "I'll fix the issue, hang on",
+          "createdAt": "2020-12-04T11:32:48Z",
+          "updatedAt": "2020-12-04T11:32:48Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert I installed the tools and found that adding a new reference caused a build error. I exactly followed the format but somehow it complained about the new reference. At this time, I simply removed this new reference. I will experiment until I know how to add a new reference.",
+          "createdAt": "2020-12-04T11:33:56Z",
+          "updatedAt": "2020-12-04T11:33:56Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "The problem was subtle. For \"automatic references\" to RFCs and I-Ds, one uses `{{?foo}}` to indicate an informative reference to \"foo\", and `{{!bar}}` for a normative reference to \"bar\". And the `?` or `!` needs to be used consistently, otherwise the reference is included twice, causing an error.\r\n\r\nOther references need to be included under `normative:` or `informative:`blocks at the beginning of the document. For those, one need not include `?` or `!` in the reference at all (because the status is known already), but if one includes `?` or `!` in the reference, it again needs to be done consistently.",
+          "createdAt": "2020-12-04T11:37:57Z",
+          "updatedAt": "2020-12-04T11:37:57Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert Great. Thanks!",
+          "createdAt": "2020-12-04T11:38:37Z",
+          "updatedAt": "2020-12-04T11:38:37Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0NzQwNDk3",
+          "commit": {
+            "abbreviatedOid": "5e4302b"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-12-04T08:20:56Z",
+          "updatedAt": "2020-12-04T08:24:37Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Please use title capitalization (also in your other headings)",
+              "createdAt": "2020-12-04T08:20:56Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "This DOI doesn't seem to be correct (or exist?)",
+              "createdAt": "2020-12-04T08:21:35Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "Reference the \"initial relase\"?",
+              "createdAt": "2020-12-04T08:22:01Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            },
+            {
+              "originalPosition": 33,
+              "body": "This seems redundant with the bullet lists in the next appendix. Maybe we add a placeholder here for now, and convert the bullet list into a section when we're done with the draft?",
+              "createdAt": "2020-12-04T08:23:34Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            },
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\r\npaper was the window decrease constant while {{!RFC8312}} changed it to CUBIC\r\n```",
+              "createdAt": "2020-12-04T08:24:06Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            },
+            {
+              "originalPosition": 44,
+              "body": "```suggestion\r\n- TCP friendly window is called W_est in {{!RFC8312}}, whereas it was W_tcp in\r\n```",
+              "createdAt": "2020-12-04T08:24:23Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0NzQ3NzU3",
+          "commit": {
+            "abbreviatedOid": "5e4302b"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-04T08:32:23Z",
+          "updatedAt": "2020-12-04T08:32:24Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "It looks like that is ACM's internal number. Let me manually add it. Thanks!",
+              "createdAt": "2020-12-04T08:32:24Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0NzQ4ODY4",
+          "commit": {
+            "abbreviatedOid": "5e4302b"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-04T08:34:17Z",
+          "updatedAt": "2020-12-04T08:34:17Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Yes, that makes sense. ",
+              "createdAt": "2020-12-04T08:34:17Z",
+              "updatedAt": "2020-12-04T11:34:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0ODExMzA4",
+          "commit": {
+            "abbreviatedOid": "bc75127"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-04T09:57:16Z",
+          "updatedAt": "2020-12-04T09:57:16Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0ODEyOTk5",
+          "commit": {
+            "abbreviatedOid": "bc75127"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "You need to wrap your lines and fix the other issues the checker found before this can be merged",
+          "createdAt": "2020-12-04T09:59:18Z",
+          "updatedAt": "2020-12-04T09:59:18Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ0ODg1NTkz",
+          "commit": {
+            "abbreviatedOid": "0a22765"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-04T11:41:23Z",
+          "updatedAt": "2020-12-04T11:41:24Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Could you add that placeholder?",
+              "createdAt": "2020-12-04T11:41:24Z",
+              "updatedAt": "2020-12-04T11:41:24Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ1MDI0MjM0",
+          "commit": {
+            "abbreviatedOid": "0a22765"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks, Sangtae!",
+          "createdAt": "2020-12-04T14:49:48Z",
+          "updatedAt": "2020-12-04T14:49:48Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ1MzY2MDc3",
+          "commit": {
+            "abbreviatedOid": "0a22765"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-04T23:41:58Z",
+          "updatedAt": "2020-12-04T23:41:58Z",
           "comments": []
         }
       ]
