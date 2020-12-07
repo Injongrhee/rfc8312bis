@@ -6,11 +6,11 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 5 June 2021                                             V. Goel
+Expires: 10 June 2021                                            V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         2 December 2020
+                                                         7 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 June 2021.
+   This Internet-Draft will expire on 10 June 2021.
 
 Copyright Notice
 
@@ -332,9 +332,9 @@ Table of Contents
 
    CUBIC uses the following window increase function:
 
-              \mathrm{W_{cubic}}(t) = C * (t - K)^3 + W_{max}
+                       3       W     (t) = C * (t - K)  + W    cubic                      max
 
-                                  Figure 1
+                               Figure 1
 
    where t is the elapsed time in seconds from the beginning of the
    current congestion avoidance stage, and K is the time period that the
@@ -342,9 +342,9 @@ Table of Contents
    if there are no further congestion events and is calculated using the
    following equation:
 
-                  K = \sqrt[3]{\frac{W_{max} - cwnd}{C}}
+         ___________        /W    - cwnd    3  /  max       K = | /  -----------    |/        C
 
-                                  Figure 2
+                               Figure 2
 
    where cwnd is the congestion window at the beginning of the current
    congestion avoidance stage.  The cwnd is calculated as described in
@@ -360,15 +360,7 @@ Table of Contents
    rate is non-decreasing and is less than the increase rate of slow
    start.
 
-          target = \left\{
-          \begin{array}{ll}
-          cwnd                          &
-          \text{if } \mathrm{W_{cubic}}(t + RTT) < cwnd \\
-          1.5 * cwnd                    &
-          \text{if } \mathrm{W_{cubic}}(t + RTT) > 1.5 * cwnd \\
-          \mathrm{W_{cubic}}(t + RTT)   &
-          \text{otherwise} \\
-          \end{array} \right.
+         /                                                          |                if W     (t + RTT) < cwnd                 |cwnd                cubic                                 |                                                          |                                                          |                                                 target = <                if W     (t + RTT) > 1.5 * cwnd           |1.5 * cwnd          cubic                                 |                                                          |                                                          |W     (t + RTT)                                           | cubic          otherwise                                 \
 
    Depending on the value of the current congestion window size cwnd,
    CUBIC runs in three different modes.
@@ -400,23 +392,22 @@ Table of Contents
    AIMD(α_(aimd), β_(aimd)) can be calculated using Figure 3.  The
    analysis shows that AIMD(α_(aimd), β_(aimd)) with
 
-            α_{aimd} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}}
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
    achieves the same average window size as Standard TCP that uses
    AIMD(1, 0.5).
 
-    \mathrm{AIMD}(α_{aimd}, β_{aimd}) =
-        \sqrt{\frac{α_{aimd} * (1 + β_{aimd})}{2 * (1 - β_{aimd}) * p}}
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
                                   Figure 3
 
    Based on the above analysis, CUBIC uses Figure 4 to estimate the
    window size W_(est) of AIMD(α_(aimd), β_(aimd)) with
 
-           \begin{array}{l}
-           α_{aimd} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}} \\
-           β_{aimd} = β_{cubic} \\
-           \end{array}
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
    which achieves the same average window size as Standard TCP.  When
    receiving an ACK in congestion avoidance (cwnd could be greater than
@@ -427,7 +418,8 @@ Table of Contents
    W_(est) is set equal to cwnd at the start of the congestion avoidance
    stage.  After that, on every ACK, W_(est) is updated using Figure 4.
 
-       W_{est} = W_{est} + α_{aimd} * \frac{segments_{acked}}{cwnd}
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
                                   Figure 4
 
@@ -441,7 +433,7 @@ Table of Contents
    TCP-friendly region and cwnd is less than W_(max), then CUBIC is in
    the concave region.  In this region, cwnd MUST be incremented by
 
-                        \frac{target - cwnd}{cwnd}
+                    target - cwnd-------------    cwnd
 
    for each received ACK, where target is calculated as described in
    Section 4.2.
@@ -467,18 +459,15 @@ Table of Contents
 4.6.  Multiplicative Decrease
 
    When a packet loss is detected by duplicate ACKs or a network
-   congestion is detected by ECN-Echo ACKs, CUBIC updates its W_(max),
-   cwnd, and ssthresh as follows.  Parameter β_(cubic) SHOULD be set to
-   0.7.
+   congestion is detected by receiving packets marked with ECN-Echo
+   (ECE), CUBIC updates its W_(max) and reduces its cwnd and ssthresh
+   immediately as below.  For both packet loss and congestion detection
+   through ECN, the sender MAY employ a fast recovery algorithm to
+   gradually adjust the congestion window to its new reduced value.
+   Parameter β_(cubic) SHOULD be set to 0.7.
 
-              \begin{array}{ll}
-              W_{max} = cwnd &
-              \text{// save cwnd before reduction} \\
-              ssthresh = \mathrm{max}(cwnd * β_{cubic}, 2) &
-              \text{// new ssthresh (at least 2 MSS)} \\
-              cwnd = ssthresh &
-              \text{// window reduction} \\
-              \end{array}
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
    A side effect of setting β_(cubic) to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
@@ -501,13 +490,8 @@ Table of Contents
    value of W_(max) before it updates W_(max) for the current congestion
    event.  Let us call the last value of W_(max) to be W_(last_max).
 
-          \left<W_{last\_max}, W_{max}\right> = \left\{
-          \begin{array}{ll}
-          \left<W_{max}, W_{max} * \frac{1 + β_{cubic}}{2}\right>
-          & \text{if } W_{max} < W_{last\_max} \\
-          \left<W_{max}, W_{max}\right>
-          &\text{otherwise} \\
-          \end{array} \right.
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
    At a congestion event, if the current value of W_(max) is less than
    W_(last_max), this indicates that the saturation point experienced by
@@ -563,16 +547,16 @@ Table of Contents
    performance analysis of CUBIC.  The average window size of CUBIC can
    be obtained by the following function:
 
-AVG\_W_{cubic} = \sqrt[4]{\frac{C * (3 + β_{cubic})}{4 * (1 - β_{cubic})}} * \frac{\sqrt[3]{RTT^4}}{\sqrt[3]{p^4}}
+   (Artwork only available as ascii-art: No external link available, see
+   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
 
-                               Figure 5
+                                  Figure 5
 
    With β_(cubic) set to 0.7, the above formula is reduced to:
 
-          AVG\_W_{cubic} = \sqrt[4]{\frac{C * 3.7}{1.2}} *
-                           \frac{\sqrt[3]{RTT^4}}{\sqrt[3]{p^4}}
+                              ____                 _______   3 /   4             4  /C * 3.7   |/ RTT AVG_W      = | / ------- * -------     cubic   |/    1.2         __                             3 / 4                             |/ p
 
-                                  Figure 6
+                               Figure 6
 
    We will determine the value of C in the following subsection using
    Figure 6.
@@ -653,9 +637,9 @@ AVG\_W_{cubic} = \sqrt[4]{\frac{C * (3 + β_{cubic})}{4 * (1 - β_{cubic})}} * \
    friendliness and aggressiveness of window increase.  Therefore, C
    SHOULD be set to 0.4.  With C set to 0.4, Figure 6 is reduced to:
 
-      AVG\_W_{cubic} = 1.054 * \frac{\sqrt[3]{RTT^4}}{\sqrt[3]{p^4}}
+                        ____                     3 /   4                     |/ RTT AVG_W      = 1.054 * -------     cubic               __                       3 / 4                       |/ p
 
-                                  Figure 7
+                               Figure 7
 
    Figure 7 is then used in the next subsection to show the scalability
    of CUBIC.
@@ -904,6 +888,9 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
    *  update W_(est) to use AIMD approach (#20)
 
    *  add Vidhi as co-author (#17)
+
+   *  note for fast recovery during cwnd decrease due to congestion
+      event (#11)
 
 B.2.  Since RFC8312
 
