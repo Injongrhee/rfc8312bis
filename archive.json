@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-06T00:04:12.089235+00:00",
+  "timestamp": "2020-12-08T00:02:52.423850+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -2789,7 +2789,7 @@
       "labels": [],
       "body": "This includes the list of changes since the original paper. The section headings are similar to the issue logs at the end, so we may clean up at the end. Also, I didn't really install any tool to check this change (markdown and others). So please let me if this doesn't work. This fixes #10.",
       "createdAt": "2020-12-04T07:21:51Z",
-      "updatedAt": "2020-12-04T23:41:58Z",
+      "updatedAt": "2020-12-07T11:01:10Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
@@ -3040,6 +3040,66 @@
           "body": "",
           "createdAt": "2020-12-04T23:41:58Z",
           "updatedAt": "2020-12-04T23:41:58Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ2MDM5OTMz",
+          "commit": {
+            "abbreviatedOid": "0a22765"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-07T11:01:10Z",
+          "updatedAt": "2020-12-07T11:01:10Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "I think we should merge these two sections into the bullet lists below. Upon publication we can decide to convert the bullet lists to prose or remove them.",
+              "createdAt": "2020-12-07T11:01:10Z",
+              "updatedAt": "2020-12-07T11:01:10Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTMzNjA0NDU0",
+      "title": "Convert tables to Markdown",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/31",
+      "state": "OPEN",
+      "author": "larseggert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-07T11:36:46Z",
+      "updatedAt": "2020-12-07T14:11:29Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
+      "headRepository": "NTAP/rfc8312bis",
+      "headRefName": "markdown-tables",
+      "headRefOid": "168dc09a5f4bd51725cd9c2d59434df5e44d43c3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ2MTgzOTM2",
+          "commit": {
+            "abbreviatedOid": "168dc09"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks, Lars!",
+          "createdAt": "2020-12-07T14:11:29Z",
+          "updatedAt": "2020-12-07T14:11:29Z",
           "comments": []
         }
       ]
