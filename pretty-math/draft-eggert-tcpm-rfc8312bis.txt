@@ -6,11 +6,11 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 10 June 2021                                            V. Goel
+Expires: 11 June 2021                                            V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         7 December 2020
+                                                         8 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 June 2021.
+   This Internet-Draft will expire on 11 June 2021.
 
 Copyright Notice
 
@@ -332,9 +332,11 @@ Table of Contents
 
    CUBIC uses the following window increase function:
 
-                       3       W     (t) = C * (t - K)  + W    cubic                      max
+                                             3
+                      W     (t) = C * (t - K)  + W
+                       cubic                      max
 
-                               Figure 1
+                                  Figure 1
 
    where t is the elapsed time in seconds from the beginning of the
    current congestion avoidance stage, and K is the time period that the
@@ -342,9 +344,13 @@ Table of Contents
    if there are no further congestion events and is calculated using the
    following equation:
 
-         ___________        /W    - cwnd    3  /  max       K = | /  -----------    |/        C
+                                    ___________
+                                   /W    - cwnd
+                               3  /  max
+                           K = | /  -----------
+                               |/        C
 
-                               Figure 2
+                                  Figure 2
 
    where cwnd is the congestion window at the beginning of the current
    congestion avoidance stage.  The cwnd is calculated as described in
@@ -360,7 +366,19 @@ Table of Contents
    rate is non-decreasing and is less than the increase rate of slow
    start.
 
-         /                                                          |                if W     (t + RTT) < cwnd                 |cwnd                cubic                                 |                                                          |                                                          |                                                 target = <                if W     (t + RTT) > 1.5 * cwnd           |1.5 * cwnd          cubic                                 |                                                          |                                                          |W     (t + RTT)                                           | cubic          otherwise                                 \
+                  /
+                  |                if W     (t + RTT) < cwnd
+                  |cwnd                cubic
+                  |
+                  |
+                  |
+         target = <                if W     (t + RTT) > 1.5 * cwnd
+                  |1.5 * cwnd          cubic
+                  |
+                  |
+                  |W     (t + RTT)
+                  | cubic          otherwise
+                  \
 
    Depending on the value of the current congestion window size cwnd,
    CUBIC runs in three different modes.
@@ -433,7 +451,9 @@ Table of Contents
    TCP-friendly region and cwnd is less than W_(max), then CUBIC is in
    the concave region.  In this region, cwnd MUST be incremented by
 
-                    target - cwnd-------------    cwnd
+                               target - cwnd
+                               -------------
+                                   cwnd
 
    for each received ACK, where target is calculated as described in
    Section 4.2.
@@ -554,9 +574,15 @@ Table of Contents
 
    With β_(cubic) set to 0.7, the above formula is reduced to:
 
-                              ____                 _______   3 /   4             4  /C * 3.7   |/ RTT AVG_W      = | / ------- * -------     cubic   |/    1.2         __                             3 / 4                             |/ p
+                                                  ____
+                                     _______   3 /   4
+                                 4  /C * 3.7   |/ RTT
+                    AVG_W      = | / ------- * -------
+                         cubic   |/    1.2         __
+                                                3 / 4
+                                                |/ p
 
-                               Figure 6
+                                  Figure 6
 
    We will determine the value of C in the following subsection using
    Figure 6.
@@ -637,9 +663,15 @@ Table of Contents
    friendliness and aggressiveness of window increase.  Therefore, C
    SHOULD be set to 0.4.  With C set to 0.4, Figure 6 is reduced to:
 
-                        ____                     3 /   4                     |/ RTT AVG_W      = 1.054 * -------     cubic               __                       3 / 4                       |/ p
+                                               ____
+                                            3 /   4
+                                            |/ RTT
+                       AVG_W      = 1.054 * -------
+                            cubic               __
+                                             3 / 4
+                                             |/ p
 
-                               Figure 7
+                                  Figure 7
 
    Figure 7 is then used in the next subsection to show the scalability
    of CUBIC.
