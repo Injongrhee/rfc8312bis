@@ -6,11 +6,11 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 11 June 2021                                            V. Goel
+Expires: 12 June 2021                                            V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         8 December 2020
+                                                         9 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 June 2021.
+   This Internet-Draft will expire on 12 June 2021.
 
 Copyright Notice
 
