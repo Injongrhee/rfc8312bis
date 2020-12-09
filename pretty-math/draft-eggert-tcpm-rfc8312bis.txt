@@ -410,22 +410,35 @@ Table of Contents
    AIMD(α_(aimd), β_(aimd)) can be calculated using Figure 3.  The
    analysis shows that AIMD(α_(aimd), β_(aimd)) with
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+                                      1 - β
+                                           cubic
+                          α     = 3 * ----------
+                           aimd       1 + β
+                                           cubic
 
    achieves the same average window size as Standard TCP that uses
    AIMD(1, 0.5).
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+                                         ___________________
+                                        /α     * (1 + β    )
+                                       /  aimd         aimd
+              AIMD(α    , β    ) = |  /  -------------------
+                    aimd   aimd    | /   2 * (1 - β    ) * p
+                                   |/              aimd
 
                                   Figure 3
 
    Based on the above analysis, CUBIC uses Figure 4 to estimate the
    window size W_(est) of AIMD(α_(aimd), β_(aimd)) with
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+                                      1 - β
+                                           cubic
+                          α     = 3 * ----------
+                           aimd       1 + β
+                                           cubic
+
+                          β     = β
+                           aimd    cubic
 
    which achieves the same average window size as Standard TCP.  When
    receiving an ACK in congestion avoidance (cwnd could be greater than
@@ -436,8 +449,10 @@ Table of Contents
    W_(est) is set equal to cwnd at the start of the congestion avoidance
    stage.  After that, on every ACK, W_(est) is updated using Figure 4.
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+                                          segments
+                                                  acked
+                    W    = W    + α     * -------------
+                     est    est    aimd       cwnd
 
                                   Figure 4
 
@@ -486,8 +501,14 @@ Table of Contents
    gradually adjust the congestion window to its new reduced value.
    Parameter β_(cubic) SHOULD be set to 0.7.
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+     W    = cwnd                      // save cwnd before reduction
+      max
+
+     ssthresh = max(cwnd * β     , 2) // new ssthresh (at least 2 MSS)
+                            cubic
+
+                                      // window reduction
+     cwnd = ssthresh
 
    A side effect of setting β_(cubic) to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
@@ -510,8 +531,19 @@ Table of Contents
    value of W_(max) before it updates W_(max) for the current congestion
    event.  Let us call the last value of W_(max) to be W_(last_max).
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+
+                     <W        , W   > =
+                       last_max   max
+
+/
+| /             1 + β     \
+|<                   cubic >                                if W    < W
+| \W   , W    * ----------/                                     max    last_max
+<   max   max        2
+|
+|
+|<W   , W   >                                               otherwise
+\  max   max
 
    At a congestion event, if the current value of W_(max) is less than
    W_(last_max), this indicates that the saturation point experienced by
@@ -567,8 +599,13 @@ Table of Contents
    performance analysis of CUBIC.  The average window size of CUBIC can
    be obtained by the following function:
 
-   (Artwork only available as ascii-art: No external link available, see
-   draft-eggert-tcpm-rfc8312bis-latest.html for artwork.)
+                                  ________________      ____
+                                 /C * (3 + β     )   3 /   4
+                            4   /           cubic    |/ RTT
+               AVG_W      = |  /  ---------------- * -------
+                    cubic   | /   4 * (1 - β     )       __
+                            |/              cubic     3 / 4
+                                                      |/ p
 
                                   Figure 5
 
