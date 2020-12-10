@@ -6,11 +6,11 @@ TCPM                                                               L. Xu
 Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Intended status: Standards Track                                Colorado
-Expires: 12 June 2021                                            V. Goel
+Expires: 13 June 2021                                            V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         9 December 2020
+                                                        10 December 2020
 
 
                  CUBIC for Fast Long-Distance Networks
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 June 2021.
+   This Internet-Draft will expire on 13 June 2021.
 
 Copyright Notice
 
@@ -279,13 +279,18 @@ Table of Contents
 
 4.1.1.  Constants of interest
 
-   <contact fullname="&#946;" asciiFullname=""/><sub>cubic</sub>:  CUBIC
-      multiplication decrease factor as described in Section 4.6
+   beta_(cubic):  CUBIC multiplication decrease factor as described in
+      Section 4.6
 
    C:  constant that determines the aggressiveness of CUBIC in competing
       with other congestion control algorithms in high BDP networks.
       Please see Section 5 for more explanation on how it is set.  The
-      unit for C is segment / (second)^3
+      unit for C is
+
+                                  segment
+                                  -------
+                                        3
+                                  second
 
 4.1.2.  Variables of interest
 
@@ -298,26 +303,26 @@ Table of Contents
 
    ssthresh:  Current slow start threshold in segments
 
-   W<sub>max</sub>:  Size of the cwnd in segments just before the cwnd
-      is reduced in the last congestion event
+   W_(max):  Size of the cwnd in segments just before the cwnd is
+      reduced in the last congestion event
 
-   W<sub>last_max</sub>:  Last value of W_(max) in segments before
-      W_(max) is updated for the current congestion event
+   W_(last_max):  Last value of W_(max) in segments before W_(max) is
+      updated for the current congestion event
 
    K:  The time period in seconds it takes to increase the current
       congestion window size to W_(max)
 
-   W<sub>cubic</sub>(t):  Target value of the congestion window in
-      segments at time t in seconds based on the cubic increase function
-      as described in Section 4.2
+   W_(cubic)(t):  Target value of the congestion window in segments at
+      time t in seconds based on the cubic increase function as
+      described in Section 4.2
 
    target:  Target value of congestion window in segments after the next
       RTT, that is, W_(cubic)(t + RTT) as described in Section 4.2
 
-   W<sub>est</sub>:  An estimate for the congestion window in segments
-      in the TCP-friendly region, that is, an estimate for the
-      congestion window using the AIMD approach similar to TCP-NewReno
-      congestion controller
+   W_(est):  An estimate for the congestion window in segments in the
+      TCP-friendly region, that is, an estimate for the congestion
+      window using the AIMD approach similar to TCP-NewReno congestion
+      controller
 
 4.2.  Window Increase Function
 
