@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-08T00:02:52.423850+00:00",
+  "timestamp": "2020-12-10T00:02:55.678708+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -1235,7 +1235,7 @@
       ],
       "body": "I wrote up a blog last year describing [my experience implementing Cubic for QUIC](https://huitema.wordpress.com/2019/11/11/implementing-cubic-congestion-control-in-quic/). There were three points:\r\n\r\n1) Issues with the formula base \"Reno compatibility\", which is documented in issue #20 \r\n2) Sensitivity of Hystart to delay jitter, which is more an issue with Hystart than with Cubic\r\n3) Sensitivity to spurious repeats\r\n\r\nI think that third issue should be addressed in the revised RFC. The basic problem is that any detected packet loss causes the host to reduce the window and start a new epoch. In some environments we can see spurious loss detection, caused for example by delayed ACKs or out of order delivery. These spurious losses can be easily identified in QUIC, and with some extra work in TCP. It would be useful if the revised RFC has a section on handling spurious losses.\r\n\r\nThe handling that I did implement was simple: reset the epoch parameters to the value of the previous epoch, before the loss. Documenting at least that would be nice.\r\n\r\n",
       "createdAt": "2020-11-20T21:56:16Z",
-      "updatedAt": "2020-12-02T16:06:43Z",
+      "updatedAt": "2020-12-09T22:46:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -1328,6 +1328,83 @@
           "body": "Ah, sure; I didn't think of that - DSACKs in particular are a good example, thanks.",
           "createdAt": "2020-12-02T16:06:43Z",
           "updatedAt": "2020-12-02T16:06:43Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nealcardwell Thank you for your comments! We are working on a section for this issue and plan to refer to some possible methods (e.g., using DSACK) to determine whether a loss event was spurious or not. Are you aware of any related documents or RFCs? Thanks",
+          "createdAt": "2020-12-09T14:23:14Z",
+          "updatedAt": "2020-12-09T14:23:14Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "NONE",
+          "body": "I'm not Neal, but still - AFAIK there are three well known methods, which are documented in RFCs: Eifel (RFCs 3522 / 4015, working very well but only if you have timestamps), F-RTO (RFC 5682), working very well and not needing anything extra from the receiver but limited to timeouts, and DSACK (RFC 3708), which is reliable when available, but late.\r\n\r\nVarious other methods are possible, depending on the transport... quite possibly something reliable could be done with QUIC. I once worked on doing it with the ECN nonce, which noone ever used anyway and which is now even obsolete  :-) https://folk.universitetetioslo.no/michawe/research/projects/spurious/index.html",
+          "createdAt": "2020-12-09T14:32:41Z",
+          "updatedAt": "2020-12-09T14:32:41Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi @yuchungcheng , @nealcardwell  mentioned that you already have a patch to undo the cwnd reduction of Cubic in case of spurious loss events. In this case, do you think it is better to shift epoch_start as Cubic currently [does for application-limited cases](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cubic.c#L149) (i.e., exclude the spurious-loss-related period from K)? Otherwise, Cubic would increase its cwnd too aggressively, especially if the fast recovery period is very long. Thanks",
+          "createdAt": "2020-12-09T14:37:48Z",
+          "updatedAt": "2020-12-09T14:37:48Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you so much, @mwelzl ! This is very helpful!",
+          "createdAt": "2020-12-09T14:38:20Z",
+          "updatedAt": "2020-12-09T14:38:20Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "NONE",
+          "body": "Yes, thanks, @mwelzl. That's a nice summary of all the undo mechanisms I'm aware of (and all the undo mechanisms that I can think of in the Linux TCP stack).\r\n",
+          "createdAt": "2020-12-09T15:01:19Z",
+          "updatedAt": "2020-12-09T15:01:19Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "NONE",
+          "body": "Re \"do you think it is better to shift epoch_start as Cubic currently does for application-limited cases\", I think it is much better to restore the epoch_start and related variables (epoch_start, last_max_cwnd, cwnd,...) to the values they had before the spurious loss recovery, so that the sender can quickly get back to the cwnd curve it would have had if there had not been a spurious loss recovery. And this is what the draft patch by @yuchungcheng did.\r\n",
+          "createdAt": "2020-12-09T15:05:33Z",
+          "updatedAt": "2020-12-09T15:05:33Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you, @nealcardwell ! Just to clarify, there are two possible different methods to restore Cubic, depending on whether we restore cwnd or epoch_start. Considering one example, where the original cwnd was 100 and the original epoch_start was 10 seconds just before the spurious loss.\r\n\r\n1) restore to the original cwnd just before the spurious loss.  For the above example, we restore cwnd back to 100 after detecting the spurious loss. But to do so, we need to shift epoch_start accordingly (i.e., plus the time period between when the spurious loss occurred and when it was detected).\r\n\r\n2) restore to the original epoch_start. For the above example, we restore epoch_start back to 10 seconds after detecting the spurious loss, but then the new cwnd calculated using the restored original epoch_start would be much higher than the original cwnd 100.  \r\n\r\nAmong these two methods, it seems that method 1 is safer. \r\n\r\nThanks",
+          "createdAt": "2020-12-09T15:38:23Z",
+          "updatedAt": "2020-12-09T15:38:23Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "About the \"other transports\": for QUIC, detection of spurious loss detection is very simple because all packets have monotonically increasing sequence numbers. Spurious loss detection happens as follow:\r\n\r\n1) At time t, packet number N is marked as lost by standard loss detection, triggering actions like scheduling retransmission of some of the frames carried by the packet and signalling of a packet loss event to the congestion controller.\r\n2) Later, at time t + dt, an acknowledgement is received for the same packet number N. At that point, a \"spurious loss detection\" event is sent to the congestion controller.\r\n\r\n",
+          "createdAt": "2020-12-09T15:52:03Z",
+          "updatedAt": "2020-12-09T15:52:03Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "For the correction of spurious losses, what I did in my implementation of QUIC was pretty much what @nealcardwell described: restore the epoch start and the associated variables. Only restoring the CWIN leaves the connection in a \"half-way\" state between erasing the spurious loss and suffering from it, and that's probably a bad idea.",
+          "createdAt": "2020-12-09T15:58:54Z",
+          "updatedAt": "2020-12-09T15:58:54Z"
+        },
+        {
+          "author": "yuchungcheng",
+          "authorAssociation": "NONE",
+          "body": "Lisong -- my (drafted) patch does #1. diff attached (it was written a few\nyears ago so may not apply cleanly)\n\n\n\n\nOn Wed, Dec 9, 2020 at 7:38 AM Lisong Xu <notifications@github.com> wrote:\n\n> Thank you, @nealcardwell <https://github.com/nealcardwell> ! Just to\n> clarify, there are two possible different methods to restore Cubic,\n> depending on whether we restore cwnd or epoch_start. Considering one\n> example, where the original cwnd was 100 and the original epoch_start was\n> 10 seconds just before the spurious loss.\n>\n>    1.\n>\n>    restore to the original cwnd just before the spurious loss. For the\n>    above example, we restore cwnd back to 100 after detecting the spurious\n>    loss. But to do so, we need to shift epoch_start accordingly (i.e., plus\n>    the time period between when the spurious loss occurred and when it was\n>    detected).\n>    2.\n>\n>    restore to the original epoch_start. For the above example, we restore\n>    epoch_start back to 10 seconds after detecting the spurious loss, but then\n>    the new cwnd calculated using the restored original epoch_start would be\n>    much higher than the original cwnd 100.\n>\n> Among these two methods, it seems that method 1 is safer.\n>\n> Thanks\n>\n> \u2014\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/NTAP/rfc8312bis/issues/23#issuecomment-741853499>, or\n> unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AM5EPYB46BOXXSTT6PAJFM3ST6KYBANCNFSM4T5JQAGA>\n> .\n>\n",
+          "createdAt": "2020-12-09T17:46:24Z",
+          "updatedAt": "2020-12-09T17:46:24Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "NONE",
+          "body": "@lisongxu, you mentioned: \"there are two possible different methods to restore Cubic, depending on whether we restore cwnd or epoch_start\". AFAICT it is better to restore both cwnd and epoch_start (to the values they had immediately before the spurious loss detection event). How does that sound?\r\n\r\nYou also mentioned: \"1. restore to the original cwnd just before the spurious loss. For the above example, we restore cwnd back to 100 after detecting the spurious loss. But to do so, we need to shift epoch_start accordingly (i.e., plus the time period between when the spurious loss occurred and when it was detected).\" In this case, why would we need to shift epoch_start? Why not restore epoch_start to the value it had before the spurious loss detection event?\r\n\r\nMy sense would be that the goal for handling spurious retransmissions should be that, as much as possible, the state of the CUBIC algorithm should be restored so that the behavior of the connection would be as if the spurious retransmissions never happened. This is what Reno does in Linux, and it seems to me that this should be doable for CUBIC as well.",
+          "createdAt": "2020-12-09T22:46:35Z",
+          "updatedAt": "2020-12-09T22:46:35Z"
         }
       ]
     },
@@ -3069,24 +3146,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTMzNjA0NDU0",
       "title": "Convert tables to Markdown",
       "url": "https://github.com/NTAP/rfc8312bis/pull/31",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-12-07T11:36:46Z",
-      "updatedAt": "2020-12-07T14:11:29Z",
+      "updatedAt": "2020-12-08T06:51:29Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "markdown-tables",
       "headRefOid": "168dc09a5f4bd51725cd9c2d59434df5e44d43c3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-12-08T06:51:25Z",
+      "mergedAt": "2020-12-08T06:51:25Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "285c653468720250a84913bbbfef85aeab2c02ee"
+      },
       "comments": [],
       "reviews": [
         {
@@ -3101,8 +3180,165 @@
           "createdAt": "2020-12-07T14:11:29Z",
           "updatedAt": "2020-12-07T14:11:29Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ2NjY4Njk5",
+          "commit": {
+            "abbreviatedOid": "168dc09"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-08T01:11:15Z",
+          "updatedAt": "2020-12-08T01:11:15Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 32,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM0MzQxNDU5",
+      "title": "add section for spurious loss events",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/32",
+      "state": "OPEN",
+      "author": "goelvidhi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I attempted to write a section on spurious loss events and I am sure it needs more work.\r\nSending this PR to gather feedback and suggestions on the text.\r\n\r\nCloses #23 ",
+      "createdAt": "2020-12-08T10:16:17Z",
+      "updatedAt": "2020-12-09T14:43:09Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "285c653468720250a84913bbbfef85aeab2c02ee",
+      "headRepository": "goelvidhi/rfc8312bis",
+      "headRefName": "spurious-retransmit",
+      "headRefOid": "6662b7adbe6efbf250fe196a5020fad833c492a3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert @lisongxu @sangtaeha, could you please give it a look when you have time :-). Thanks.",
+          "createdAt": "2020-12-09T09:30:28Z",
+          "updatedAt": "2020-12-09T09:30:28Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ4MjUyOTcz",
+          "commit": {
+            "abbreviatedOid": "6662b7a"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thank you, Vidhi! I would suggest two changes. \r\n\r\nFirst, add some references to the methods to detect spurious loss events.  @mwelzl listed some good references.\r\n\r\nSecond, explicitly list the variables to save when there is a loss event, and explicitly describe how to restore their values when a spurious loss event is detected. I can help you with this part. \r\n\r\nThank you again!",
+          "createdAt": "2020-12-09T14:43:09Z",
+          "updatedAt": "2020-12-09T14:43:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM0NDQzMzk2",
+      "title": "Link to the closed issues",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/33",
+      "state": "MERGED",
+      "author": "larseggert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-08T13:15:23Z",
+      "updatedAt": "2020-12-09T14:46:32Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "285c653468720250a84913bbbfef85aeab2c02ee",
+      "headRepository": "NTAP/rfc8312bis",
+      "headRefName": "link-to-issues",
+      "headRefOid": "2b5ac12ec2321a7cc6dd2f450ca9821074402e50",
+      "closedAt": "2020-12-08T17:04:32Z",
+      "mergedAt": "2020-12-08T17:04:32Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ3NDI3OTg1",
+          "commit": {
+            "abbreviatedOid": "2b5ac12"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "The list with the links looks great! Thanks, @larseggert!",
+          "createdAt": "2020-12-08T16:51:50Z",
+          "updatedAt": "2020-12-08T16:51:50Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ4MjU2NTcz",
+          "commit": {
+            "abbreviatedOid": "2b5ac12"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Thanks, Lars!",
+          "createdAt": "2020-12-09T14:46:32Z",
+          "updatedAt": "2020-12-09T14:46:32Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM0NDQ1MTYz",
+      "title": "Pretty Latex math",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/34",
+      "state": "OPEN",
+      "author": "larseggert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This uses the experimental `math` support in [kramdown-rfc2629](https://github.com/cabo/kramdown-rfc2629) to render Latex-style equations via [tex2svg](https://github.com/mathjax/mathjax-node-cli) and [asciitex](https://github.com/larseggert/asciiTeX).\r\n\r\nI'm still working through some issues with the toolchain, so this isn't ready for merging yet, but I wanted to give you a preview.",
+      "createdAt": "2020-12-08T13:18:18Z",
+      "updatedAt": "2020-12-09T18:25:40Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
+      "headRepository": "NTAP/rfc8312bis",
+      "headRefName": "pretty-math",
+      "headRefOid": "fb4af8b01e98074427f27202d935c3af0bec2e1a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It looks nice. There is some markup text showing up in Definitions section, but I am sure you already know about it. :-)",
+          "createdAt": "2020-12-09T07:11:38Z",
+          "updatedAt": "2020-12-09T07:11:38Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@goelvidhi yes, that is part of the toolchain issue. The text version is also missing some of the math, which is another.",
+          "createdAt": "2020-12-09T09:33:15Z",
+          "updatedAt": "2020-12-09T09:33:15Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
