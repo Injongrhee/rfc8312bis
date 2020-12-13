@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-10T00:02:55.678708+00:00",
+  "timestamp": "2020-12-13T00:02:39.660633+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -1235,7 +1235,7 @@
       ],
       "body": "I wrote up a blog last year describing [my experience implementing Cubic for QUIC](https://huitema.wordpress.com/2019/11/11/implementing-cubic-congestion-control-in-quic/). There were three points:\r\n\r\n1) Issues with the formula base \"Reno compatibility\", which is documented in issue #20 \r\n2) Sensitivity of Hystart to delay jitter, which is more an issue with Hystart than with Cubic\r\n3) Sensitivity to spurious repeats\r\n\r\nI think that third issue should be addressed in the revised RFC. The basic problem is that any detected packet loss causes the host to reduce the window and start a new epoch. In some environments we can see spurious loss detection, caused for example by delayed ACKs or out of order delivery. These spurious losses can be easily identified in QUIC, and with some extra work in TCP. It would be useful if the revised RFC has a section on handling spurious losses.\r\n\r\nThe handling that I did implement was simple: reset the epoch parameters to the value of the previous epoch, before the loss. Documenting at least that would be nice.\r\n\r\n",
       "createdAt": "2020-11-20T21:56:16Z",
-      "updatedAt": "2020-12-09T22:46:35Z",
+      "updatedAt": "2020-12-10T15:08:03Z",
       "closedAt": null,
       "comments": [
         {
@@ -1405,6 +1405,41 @@
           "body": "@lisongxu, you mentioned: \"there are two possible different methods to restore Cubic, depending on whether we restore cwnd or epoch_start\". AFAICT it is better to restore both cwnd and epoch_start (to the values they had immediately before the spurious loss detection event). How does that sound?\r\n\r\nYou also mentioned: \"1. restore to the original cwnd just before the spurious loss. For the above example, we restore cwnd back to 100 after detecting the spurious loss. But to do so, we need to shift epoch_start accordingly (i.e., plus the time period between when the spurious loss occurred and when it was detected).\" In this case, why would we need to shift epoch_start? Why not restore epoch_start to the value it had before the spurious loss detection event?\r\n\r\nMy sense would be that the goal for handling spurious retransmissions should be that, as much as possible, the state of the CUBIC algorithm should be restored so that the behavior of the connection would be as if the spurious retransmissions never happened. This is what Reno does in Linux, and it seems to me that this should be doable for CUBIC as well.",
           "createdAt": "2020-12-09T22:46:35Z",
           "updatedAt": "2020-12-09T22:46:35Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you all for your comments!\r\n\r\n@yuchungcheng  Hi Yuchung, it seems that the diff attachment was blocked somewhere. Could you please directly email it to me at xu@unl.edu? Thank you!",
+          "createdAt": "2020-12-10T04:18:33Z",
+          "updatedAt": "2020-12-10T04:18:33Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nealcardwell Hi Neal, I can see that my original description is not that clear. Below I try to describe the two methods using two figures.\r\n\r\nMethod 1: undo cwnd and shift epoch_start so that cwnd continues smoothly from the value it had before the spurious loss. \r\n![cubic](https://user-images.githubusercontent.com/10427041/101723253-86126500-3a71-11eb-84b8-f053775e69e1.jpg)\r\n\r\nMethod 2:  undo cwnd and undo epoch_start. In this case, there is a big jump from restored cwnd and the next RTT cwnd (calculated using restored epoch_start)\r\n![cubic2](https://user-images.githubusercontent.com/10427041/101723556-1e104e80-3a72-11eb-9118-cf040113ce78.jpg)\r\n\r\nBoth methods are ok, but method 1 is more conservative and thus possibly safer?\r\n\r\nThanks",
+          "createdAt": "2020-12-10T05:03:22Z",
+          "updatedAt": "2020-12-10T05:03:22Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks @lisongxu for the graphical explanation. I agree with @nealcardwell that setting cwnd and epoch start to the value before the spurious loss event occurred would be good. Which means cwnd is set to 100 and epoch start to epoch_start and W_cubic(t) will likely look like what method 2 shows soon after as t would have progressed much further.\r\n\r\nOTOH method 1 is more conservative, and I don't understand how can a transport extrapolate the shifted epoch start? From your graph, if spurious loss occurred at X and spurious loss detection occurred at Y (at which point we update cwnd to 100), how does one calculate the time X` (between X and Y) for the shifted epoch start?",
+          "createdAt": "2020-12-10T07:27:33Z",
+          "updatedAt": "2020-12-10T08:35:48Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "NONE",
+          "body": "Thanks @lisongxu for the very nice graphical explanation. I agree with @goelvidhi  and maintain that restoring both cwnd and epoch start to the value before the spurious loss event occurred would be the best approach.\r\n\r\nKeeping in mind the typical long time-scales over which the CUBIC curve evolves (for high-BDP connections for which the CUBIC curve is governing behavior, rather than the Reno emulation), and the quick 1-2 round-trip resolution of undo events, my sense is that a depiction that better conveys the sense of Method 2 (restoring both cwnd and epoch start ) would be something like:\r\n\r\n![image](https://user-images.githubusercontent.com/11696413/101785344-a3275200-3aca-11eb-941d-9ed7f71b7d55.png)\r\n",
+          "createdAt": "2020-12-10T14:35:03Z",
+          "updatedAt": "2020-12-10T14:35:03Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you all for the constructive discussions. Then let's choose method 2, which should be easier to implement than method 1. In addition, the revised RFC requires that the per-RTT cwnd increment is limited by that [1.5x upper bound](https://github.com/NTAP/rfc8312bis/issues/14), so method 2 should be fine even in special cases where undo happens many RTTs after a spurious loss event.",
+          "createdAt": "2020-12-10T15:08:03Z",
+          "updatedAt": "2020-12-10T15:08:03Z"
         }
       ]
     },
@@ -1424,7 +1459,7 @@
       ],
       "body": "This is tiny and editorial:\r\n\r\nSection 4.7 of RFC 8312 talks about how values are initialized after an RTO; it seems obvious that these values would also be used at the very beginning, but this is never explicitly said. It seems obvious that, at this point, W_last_max should be set to W_max, but how to initialize W_last_max is also not explicitly said (unless I missed it).",
       "createdAt": "2020-12-01T08:19:58Z",
-      "updatedAt": "2020-12-03T15:22:38Z",
+      "updatedAt": "2020-12-10T16:22:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -1461,6 +1496,20 @@
           "body": "I can help with this one. ",
           "createdAt": "2020-12-03T14:39:06Z",
           "updatedAt": "2020-12-03T14:39:06Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@lisongxu could you prepare a PR? we'd like to be able to submit a -01 version to the IETF soon and ask for adoption.",
+          "createdAt": "2020-12-10T07:46:26Z",
+          "updatedAt": "2020-12-10T07:46:26Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert done, thanks",
+          "createdAt": "2020-12-10T16:22:09Z",
+          "updatedAt": "2020-12-10T16:22:09Z"
         }
       ]
     }
@@ -2866,7 +2915,7 @@
       "labels": [],
       "body": "This includes the list of changes since the original paper. The section headings are similar to the issue logs at the end, so we may clean up at the end. Also, I didn't really install any tool to check this change (markdown and others). So please let me if this doesn't work. This fixes #10.",
       "createdAt": "2020-12-04T07:21:51Z",
-      "updatedAt": "2020-12-07T11:01:10Z",
+      "updatedAt": "2020-12-10T07:58:33Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
@@ -3208,13 +3257,13 @@
       "labels": [],
       "body": "I attempted to write a section on spurious loss events and I am sure it needs more work.\r\nSending this PR to gather feedback and suggestions on the text.\r\n\r\nCloses #23 ",
       "createdAt": "2020-12-08T10:16:17Z",
-      "updatedAt": "2020-12-09T14:43:09Z",
+      "updatedAt": "2020-12-12T20:21:57Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "285c653468720250a84913bbbfef85aeab2c02ee",
+      "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
       "headRepository": "goelvidhi/rfc8312bis",
       "headRefName": "spurious-retransmit",
-      "headRefOid": "6662b7adbe6efbf250fe196a5020fad833c492a3",
+      "headRefOid": "d46af26e7da7e3975c2d68c5996de0144a799455",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3226,6 +3275,34 @@
           "body": "@larseggert @lisongxu @sangtaeha, could you please give it a look when you have time :-). Thanks.",
           "createdAt": "2020-12-09T09:30:28Z",
           "updatedAt": "2020-12-09T09:30:28Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@goelvidhi Hi Vidhi, how about adding the following paragraphs to your section?\r\n\r\n_When there is a loss event, save the current values of the following variables before the window reduction_\r\n\r\n```\r\n    prior_cwnd = cwnd\r\n    prior_W_max = W_max\r\n    prior_K = K\r\n    prior_epoch_start = epoch_start\r\n```\r\n\r\n_Once a spurious loss event is detected, restore their original values as follows_\r\n\r\n```\r\n   cwnd = max(cwnd, prior_cwnd)\r\n   W_max = prior_W_max\r\n   K = prior_K\r\n   epoch_start = prior_epoch_start\r\n```",
+          "createdAt": "2020-12-10T16:34:11Z",
+          "updatedAt": "2020-12-10T16:38:24Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Also revising the first sentence right after Equation 1 in Section \"Window Increase Function\" as follow.\r\n\r\n_where t is the elapsed time in seconds from the beginning of the current congestion avoidance stage (i.e., t = current time - epoch_start, where epoch_start is the beginning time of the current congestion avoidance stage)._",
+          "createdAt": "2020-12-10T16:38:08Z",
+          "updatedAt": "2020-12-10T16:38:08Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@lisongxu should we also add W_est to the state that needs to be restored?",
+          "createdAt": "2020-12-11T05:43:30Z",
+          "updatedAt": "2020-12-11T05:43:30Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @lisongxu should we also add W_est to the state that needs to be restored?\r\n\r\nYes, you are right. Thanks, Vidhi!",
+          "createdAt": "2020-12-11T14:11:42Z",
+          "updatedAt": "2020-12-11T14:11:42Z"
         }
       ],
       "reviews": [
@@ -3241,6 +3318,398 @@
           "createdAt": "2020-12-09T14:43:09Z",
           "updatedAt": "2020-12-09T14:43:09Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5ODQzNDM5",
+          "commit": {
+            "abbreviatedOid": "5ddf8b2"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T07:00:50Z",
+          "updatedAt": "2020-12-11T07:02:19Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "IIRC Eifel comes with an IPR declaration that makes it problematic for many implementations. I'd cite it as OPTIONAL, with an informative reference.",
+              "createdAt": "2020-12-11T07:00:50Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "Should we recommend one of these over the other (i.e., with a SHOULD)?",
+              "createdAt": "2020-12-11T07:01:24Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            },
+            {
+              "originalPosition": 63,
+              "body": "Why is this a `max` when the others are not?",
+              "createdAt": "2020-12-11T07:02:03Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5ODQ4ODcy",
+          "commit": {
+            "abbreviatedOid": "5ddf8b2"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T07:13:32Z",
+          "updatedAt": "2020-12-11T07:13:32Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "I used MAY as an implementation could completely do something else (for example, QUIC doesn't require any of these).\r\nBut I don't have enough experience to decide what would be better. Please let me know if SHOULD would be ok in case an implementation decides to do something completely different?",
+              "createdAt": "2020-12-11T07:13:32Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5ODY4NzM3",
+          "commit": {
+            "abbreviatedOid": "5ddf8b2"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T07:53:24Z",
+          "updatedAt": "2020-12-11T07:53:24Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "I'd at least reorder them so Eifel is last, and whatever we prefer is first. And make all the references informative (`?` instead of `!`).",
+              "createdAt": "2020-12-11T07:53:24Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTE2Mzcz",
+          "commit": {
+            "abbreviatedOid": "5ddf8b2"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T09:07:19Z",
+          "updatedAt": "2020-12-11T09:07:20Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "@lisongxu had suggested this; I think it is to make sure if the congestion window had increased more than the prior_cwnd before the spurious retransmit is detected, we take the higher value.\r\nWould like to know what @lisongxu thinks about this.",
+              "createdAt": "2020-12-11T09:07:19Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTE2ODAw",
+          "commit": {
+            "abbreviatedOid": "5ddf8b2"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T09:07:53Z",
+          "updatedAt": "2020-12-11T09:07:53Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "How do I cite something as OPTIONAL?\r\n",
+              "createdAt": "2020-12-11T09:07:53Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTE3MjYy",
+          "commit": {
+            "abbreviatedOid": "5ddf8b2"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T09:08:31Z",
+          "updatedAt": "2020-12-11T09:08:32Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "We should explain this, since this doesn't do what the text says (which is \"restore the original values\").",
+              "createdAt": "2020-12-11T09:08:32Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTM3NTcx",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T09:35:46Z",
+          "updatedAt": "2020-12-11T09:35:46Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "I rearranged the references and updated them to be informative.",
+              "createdAt": "2020-12-11T09:35:46Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTQwMjg2",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T09:39:14Z",
+          "updatedAt": "2020-12-11T09:39:15Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "You cite it informatively and say that it MAY be used, as you currently are doing.\r\n\r\n",
+              "createdAt": "2020-12-11T09:39:15Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTQxMzcz",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T09:40:37Z",
+          "updatedAt": "2020-12-11T09:40:38Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "Do we mean that CUBIC MUST choose one of the three, and any of the three MAY be chosen? Or do we mean that CUBIC MAY choose one of the three but also something else?",
+              "createdAt": "2020-12-11T09:40:37Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTY0OTA3",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T10:11:57Z",
+          "updatedAt": "2020-12-11T10:11:57Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "It's the last one - `Or do we mean that CUBIC MAY choose one of the three but also something else?`\r\n\r\nShould I phrase it differently?\r\n\r\n",
+              "createdAt": "2020-12-11T10:11:57Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTY1MjM0",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T10:12:24Z",
+          "updatedAt": "2020-12-11T10:12:25Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "will wait for @lisongxu comment on this.",
+              "createdAt": "2020-12-11T10:12:24Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5OTgxNDc1",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T10:35:01Z",
+          "updatedAt": "2020-12-11T10:35:02Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "```suggestion\r\nCUBIC MAY implement an algorithm to detect spurious retransmissions,\r\nsuch as DSACK {{?RFC3708}}, Forward RTO-Recovery {{?RFC5682}}\r\nor Eifel {{?RFC3522}}. Once a spurious loss event is detected, CUBIC should\r\n```",
+              "createdAt": "2020-12-11T10:35:02Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwMTI4NTYy",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-11T14:09:41Z",
+          "updatedAt": "2020-12-11T14:09:41Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "At an undo, the current cwnd may or may not be lower than the saved prior_cwnd. If the current cwnd is already higher than the saved prior_cwnd, we do not need to undo. \r\n\r\nHow about?\r\n\r\n_When there is a loss event, A CUBIC implementation SHOULD save the current\r\nvalue of the following variables before the congestion window reduction._\r\n\r\n~~~\r\n    prior_cwnd = cwnd\r\n    prior_ssthresh = ssthresh\r\n    prior_W_max = W_max\r\n    prior_K = K\r\n    prior_epoch_start = epoch_start\r\n    prior_W_est = W_est\r\n~~~\r\n\r\n_..................  Once a spurious loss event is detected, CUBIC should restore the original values of the above mentioned variables as follows if the current cwnd is lower than prior_cwnd._\r\n\r\n~~~\r\n    if (cwnd < prior_cwnd) {\r\n        cwnd = prior_cwnd\r\n        ssthresh = prior_ssthresh\r\n        W_max = prior_W_max\r\n        K = prior_K\r\n        epoch_start = prior_epoch_start\r\n        W_est = prior_W_est\r\n    }\r\n~~~\r\n\r\n",
+              "createdAt": "2020-12-11T14:09:41Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwNjg0MjEy",
+          "commit": {
+            "abbreviatedOid": "ef89b34"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-12T03:12:10Z",
+          "updatedAt": "2020-12-12T03:12:10Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Ah.. I am not sure about not reverting the state when `cwnd > prior_cwnd`, esp. the variables W_max, epoch_start and K as these dictate the CUBIC curve. For example, W_max for the spurious loss event will be lower than prior_W_max and hence CUBIC will enter Convex phase earlier.\r\nSpurious loss detection should not usually take more than a couple of RTTs and I think the safest thing to do here is to revert all state to previous state, i.e.\r\n```\r\n        cwnd = prior_cwnd\r\n        ssthresh = prior_ssthresh\r\n        W_max = prior_W_max\r\n        K = prior_K\r\n        epoch_start = prior_epoch_start\r\n        W_est = prior_W_est",
+              "createdAt": "2020-12-12T03:12:10Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwNjg0NDk2",
+          "commit": {
+            "abbreviatedOid": "a84bfea"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-12T03:16:27Z",
+          "updatedAt": "2020-12-12T03:16:27Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "done",
+              "createdAt": "2020-12-12T03:16:27Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwNjg1NTEy",
+          "commit": {
+            "abbreviatedOid": "ee15997"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-12T03:30:56Z",
+          "updatedAt": "2020-12-12T03:30:57Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Since the goal of the undo is to improve the performance of Cubic, it is reasonable to keep the current cwnd if it is already higher than prior_cwnd. This is why I like to restore cwnd only if cwnd<prior_cwnd. By the way, this is how current Linux TCP does.\r\n\r\nBut I am not sure whether we should restore other variables. Both are fine with me. Thanks.",
+              "createdAt": "2020-12-12T03:30:57Z",
+              "updatedAt": "2020-12-12T06:55:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwNjk3MTI2",
+          "commit": {
+            "abbreviatedOid": "d46af26"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-12T06:56:04Z",
+          "updatedAt": "2020-12-12T06:56:04Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "ok, I added a special note for congestion window. Please take a look.",
+              "createdAt": "2020-12-12T06:56:04Z",
+              "updatedAt": "2020-12-12T06:56:04Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwODQxMzAx",
+          "commit": {
+            "abbreviatedOid": "d46af26"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-12T16:06:20Z",
+          "updatedAt": "2020-12-12T16:06:21Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Hi Vidhi, I thought about it last night, and now I prefer the if-then method as explained below. \r\n\r\nThere are two possible scenarios for undo. \r\n\r\nFirst (usual cases), an undo happens soon after a spurious loss event, and the current cwnd at undo is still lower than prior_cwnd. In these cases, it makes sense to restore the previous values of all the variables (better performance and safe). \r\n\r\nSecond (unusual cases), an undo happens long after a spurious loss event, and as a result, the current cwnd at undo is already higher than prior_cwnd. In these cases, it makes sense to keep the current values of all the variables, because their prior values were measured and calculated too long ago and thus may not be good or accurate measurements of the current network condition (bandwidth, delay, ...)\r\n\r\nTherefore, the undo code is\r\n~~~\r\n    if (cwnd < prior_cwnd) {\r\n        cwnd = prior_cwnd\r\n        ssthresh = prior_ssthresh\r\n        W_max = prior_W_max\r\n        K = prior_K\r\n        epoch_start = prior_epoch_start\r\n        W_est = prior_W_est\r\n    }\r\n~~~\r\n\r\nHow do you think?\r\n\r\nThanks!",
+              "createdAt": "2020-12-12T16:06:20Z",
+              "updatedAt": "2020-12-12T16:06:21Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwODU5NDA3",
+          "commit": {
+            "abbreviatedOid": "d46af26"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-12T20:21:56Z",
+          "updatedAt": "2020-12-12T20:21:57Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Sounds good. Will update the PR.",
+              "createdAt": "2020-12-12T20:21:56Z",
+              "updatedAt": "2020-12-12T20:21:57Z"
+            }
+          ]
         }
       ]
     },
@@ -3311,13 +3780,13 @@
       "labels": [],
       "body": "This uses the experimental `math` support in [kramdown-rfc2629](https://github.com/cabo/kramdown-rfc2629) to render Latex-style equations via [tex2svg](https://github.com/mathjax/mathjax-node-cli) and [asciitex](https://github.com/larseggert/asciiTeX).\r\n\r\nI'm still working through some issues with the toolchain, so this isn't ready for merging yet, but I wanted to give you a preview.",
       "createdAt": "2020-12-08T13:18:18Z",
-      "updatedAt": "2020-12-09T18:25:40Z",
+      "updatedAt": "2020-12-10T10:01:01Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "pretty-math",
-      "headRefOid": "fb4af8b01e98074427f27202d935c3af0bec2e1a",
+      "headRefOid": "34970508aeae308b1a8b776b7e68af105428f97a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3339,6 +3808,88 @@
         }
       ],
       "reviews": []
+    },
+    {
+      "number": 35,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM2MDU2MDA3",
+      "title": "Initialization",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/35",
+      "state": "OPEN",
+      "author": "lisongxu",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Removing variable w_last_max and keeping only w_max, for two reasons.\r\n\r\n1) w_last_max is not explicitly initialized in section 4.7 (timeout).\r\n\r\n2) simplify RFC and avoid confusion. ",
+      "createdAt": "2020-12-10T16:21:19Z",
+      "updatedAt": "2020-12-12T02:47:26Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
+      "headRepository": "lisongxu/rfc8312bis",
+      "headRefName": "Initialization",
+      "headRefOid": "cbac491e9b424f056a54c85ab09ab8b383755d42",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "There are three nits that need to be fixed: https://github.com/NTAP/rfc8312bis/pull/35/checks?check_run_id=1531869631",
+          "createdAt": "2020-12-10T17:07:07Z",
+          "updatedAt": "2020-12-10T17:07:07Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @larseggert . Just fixed",
+          "createdAt": "2020-12-10T18:52:48Z",
+          "updatedAt": "2020-12-10T18:52:48Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Looks great. Thanks @lisongxu.\r\nCan we add the change log for this? ",
+          "createdAt": "2020-12-11T03:08:16Z",
+          "updatedAt": "2020-12-11T04:05:22Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Looks great. Thanks @lisongxu.\r\n> Can we add the change log for this?\r\n\r\nYes, I will add that. \r\n\r\nAlso we should initialize W_est in case of timeout (similar to undo). ",
+          "createdAt": "2020-12-11T14:16:16Z",
+          "updatedAt": "2020-12-11T14:16:16Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ5NTA1NTg0",
+          "commit": {
+            "abbreviatedOid": "759b9ff"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-10T18:53:53Z",
+          "updatedAt": "2020-12-10T18:53:53Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwNjgyMzg2",
+          "commit": {
+            "abbreviatedOid": "cbac491"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-12T02:47:26Z",
+          "updatedAt": "2020-12-12T02:47:26Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
