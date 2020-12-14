@@ -2708,7 +2708,7 @@ be disabled.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
 <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, but sets ssthresh using <span class="contact-name">β</span><sub>cubic</sub> (same as in
 <a href="#mult-dec" class="xref">Section 4.6</a>) that is different from Standard TCP <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
 <p id="section-4.8-2">During the first congestion avoidance after a timeout, CUBIC
-increases its congestion window size using Eq. 1, where t is the
+increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>, where t is the
 elapsed time since the beginning of the current congestion avoidance,
 K is set to 0, and W_max is set to the congestion window size at the
 beginning of the current congestion avoidance. In addition, for the
