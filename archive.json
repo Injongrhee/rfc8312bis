@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-13T00:02:39.660633+00:00",
+  "timestamp": "2020-12-15T00:02:43.457818+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -1224,7 +1224,7 @@
       "id": "MDU6SXNzdWU3NDc4MTk0MzM=",
       "title": "Add handling of spurious retransmissions",
       "url": "https://github.com/NTAP/rfc8312bis/issues/23",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "NONE",
       "assignees": [
@@ -1235,8 +1235,8 @@
       ],
       "body": "I wrote up a blog last year describing [my experience implementing Cubic for QUIC](https://huitema.wordpress.com/2019/11/11/implementing-cubic-congestion-control-in-quic/). There were three points:\r\n\r\n1) Issues with the formula base \"Reno compatibility\", which is documented in issue #20 \r\n2) Sensitivity of Hystart to delay jitter, which is more an issue with Hystart than with Cubic\r\n3) Sensitivity to spurious repeats\r\n\r\nI think that third issue should be addressed in the revised RFC. The basic problem is that any detected packet loss causes the host to reduce the window and start a new epoch. In some environments we can see spurious loss detection, caused for example by delayed ACKs or out of order delivery. These spurious losses can be easily identified in QUIC, and with some extra work in TCP. It would be useful if the revised RFC has a section on handling spurious losses.\r\n\r\nThe handling that I did implement was simple: reset the epoch parameters to the value of the previous epoch, before the loss. Documenting at least that would be nice.\r\n\r\n",
       "createdAt": "2020-11-20T21:56:16Z",
-      "updatedAt": "2020-12-10T15:08:03Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-14T07:12:07Z",
+      "closedAt": "2020-12-14T07:12:07Z",
       "comments": [
         {
           "author": "nealcardwell",
@@ -1448,7 +1448,7 @@
       "id": "MDU6SXNzdWU3NTQxNjQyNDg=",
       "title": "Initialization",
       "url": "https://github.com/NTAP/rfc8312bis/issues/28",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "NONE",
       "assignees": [
@@ -1459,8 +1459,8 @@
       ],
       "body": "This is tiny and editorial:\r\n\r\nSection 4.7 of RFC 8312 talks about how values are initialized after an RTO; it seems obvious that these values would also be used at the very beginning, but this is never explicitly said. It seems obvious that, at this point, W_last_max should be set to W_max, but how to initialize W_last_max is also not explicitly said (unless I missed it).",
       "createdAt": "2020-12-01T08:19:58Z",
-      "updatedAt": "2020-12-10T16:22:09Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-14T07:10:00Z",
+      "closedAt": "2020-12-14T07:10:00Z",
       "comments": [
         {
           "author": "lisongxu",
@@ -2915,13 +2915,13 @@
       "labels": [],
       "body": "This includes the list of changes since the original paper. The section headings are similar to the issue logs at the end, so we may clean up at the end. Also, I didn't really install any tool to check this change (markdown and others). So please let me if this doesn't work. This fixes #10.",
       "createdAt": "2020-12-04T07:21:51Z",
-      "updatedAt": "2020-12-10T07:58:33Z",
+      "updatedAt": "2020-12-14T16:10:33Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
       "headRepository": "sangtaeha/rfc8312bis",
       "headRefName": "highlight-differences",
-      "headRefOid": "0a2276533bdd30613a478f46d2ef91234370ef80",
+      "headRefOid": "458ee4082e0068de1981fd4c59d5241dca535e33",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3022,37 +3022,37 @@
               "originalPosition": 12,
               "body": "Please use title capitalization (also in your other headings)",
               "createdAt": "2020-12-04T08:20:56Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             },
             {
               "originalPosition": 4,
               "body": "This DOI doesn't seem to be correct (or exist?)",
               "createdAt": "2020-12-04T08:21:35Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             },
             {
               "originalPosition": 15,
               "body": "Reference the \"initial relase\"?",
               "createdAt": "2020-12-04T08:22:01Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             },
             {
               "originalPosition": 33,
               "body": "This seems redundant with the bullet lists in the next appendix. Maybe we add a placeholder here for now, and convert the bullet list into a section when we're done with the draft?",
               "createdAt": "2020-12-04T08:23:34Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             },
             {
               "originalPosition": 39,
               "body": "```suggestion\r\npaper was the window decrease constant while {{!RFC8312}} changed it to CUBIC\r\n```",
               "createdAt": "2020-12-04T08:24:06Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             },
             {
               "originalPosition": 44,
               "body": "```suggestion\r\n- TCP friendly window is called W_est in {{!RFC8312}}, whereas it was W_tcp in\r\n```",
               "createdAt": "2020-12-04T08:24:23Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             }
           ]
         },
@@ -3072,7 +3072,7 @@
               "originalPosition": 4,
               "body": "It looks like that is ACM's internal number. Let me manually add it. Thanks!",
               "createdAt": "2020-12-04T08:32:24Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             }
           ]
         },
@@ -3092,7 +3092,7 @@
               "originalPosition": 33,
               "body": "Yes, that makes sense. ",
               "createdAt": "2020-12-04T08:34:17Z",
-              "updatedAt": "2020-12-04T11:34:09Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             }
           ]
         },
@@ -3138,7 +3138,7 @@
               "originalPosition": 33,
               "body": "Could you add that placeholder?",
               "createdAt": "2020-12-04T11:41:24Z",
-              "updatedAt": "2020-12-04T11:41:24Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             }
           ]
         },
@@ -3184,7 +3184,7 @@
               "originalPosition": 96,
               "body": "I think we should merge these two sections into the bullet lists below. Upon publication we can decide to convert the bullet lists to prose or remove them.",
               "createdAt": "2020-12-07T11:01:10Z",
-              "updatedAt": "2020-12-07T11:01:10Z"
+              "updatedAt": "2020-12-14T16:10:33Z"
             }
           ]
         }
@@ -3250,24 +3250,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM0MzQxNDU5",
       "title": "add section for spurious loss events",
       "url": "https://github.com/NTAP/rfc8312bis/pull/32",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I attempted to write a section on spurious loss events and I am sure it needs more work.\r\nSending this PR to gather feedback and suggestions on the text.\r\n\r\nCloses #23 ",
       "createdAt": "2020-12-08T10:16:17Z",
-      "updatedAt": "2020-12-12T20:21:57Z",
+      "updatedAt": "2020-12-14T07:12:07Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
+      "baseRefOid": "bd1fcac0aba1b3960aaf3cb1cbc24b06d280a6bf",
       "headRepository": "goelvidhi/rfc8312bis",
       "headRefName": "spurious-retransmit",
-      "headRefOid": "d46af26e7da7e3975c2d68c5996de0144a799455",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "7f2f0a30be0cccec12dbe7ac6dcaaf4b061e319f",
+      "closedAt": "2020-12-14T07:12:07Z",
+      "mergedAt": "2020-12-14T07:12:06Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "bacd8983f5dff7c20284e7fb5299c970b980bf05"
+      },
       "comments": [
         {
           "author": "goelvidhi",
@@ -3335,19 +3337,19 @@
               "originalPosition": 57,
               "body": "IIRC Eifel comes with an IPR declaration that makes it problematic for many implementations. I'd cite it as OPTIONAL, with an informative reference.",
               "createdAt": "2020-12-11T07:00:50Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             },
             {
               "originalPosition": 58,
               "body": "Should we recommend one of these over the other (i.e., with a SHOULD)?",
               "createdAt": "2020-12-11T07:01:24Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             },
             {
               "originalPosition": 63,
               "body": "Why is this a `max` when the others are not?",
               "createdAt": "2020-12-11T07:02:03Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3367,7 +3369,7 @@
               "originalPosition": 58,
               "body": "I used MAY as an implementation could completely do something else (for example, QUIC doesn't require any of these).\r\nBut I don't have enough experience to decide what would be better. Please let me know if SHOULD would be ok in case an implementation decides to do something completely different?",
               "createdAt": "2020-12-11T07:13:32Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3387,7 +3389,7 @@
               "originalPosition": 58,
               "body": "I'd at least reorder them so Eifel is last, and whatever we prefer is first. And make all the references informative (`?` instead of `!`).",
               "createdAt": "2020-12-11T07:53:24Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3407,7 +3409,7 @@
               "originalPosition": 63,
               "body": "@lisongxu had suggested this; I think it is to make sure if the congestion window had increased more than the prior_cwnd before the spurious retransmit is detected, we take the higher value.\r\nWould like to know what @lisongxu thinks about this.",
               "createdAt": "2020-12-11T09:07:19Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3427,7 +3429,7 @@
               "originalPosition": 57,
               "body": "How do I cite something as OPTIONAL?\r\n",
               "createdAt": "2020-12-11T09:07:53Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3447,7 +3449,7 @@
               "originalPosition": 63,
               "body": "We should explain this, since this doesn't do what the text says (which is \"restore the original values\").",
               "createdAt": "2020-12-11T09:08:32Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3467,7 +3469,7 @@
               "originalPosition": 58,
               "body": "I rearranged the references and updated them to be informative.",
               "createdAt": "2020-12-11T09:35:46Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3487,7 +3489,7 @@
               "originalPosition": 57,
               "body": "You cite it informatively and say that it MAY be used, as you currently are doing.\r\n\r\n",
               "createdAt": "2020-12-11T09:39:15Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3507,7 +3509,7 @@
               "originalPosition": 59,
               "body": "Do we mean that CUBIC MUST choose one of the three, and any of the three MAY be chosen? Or do we mean that CUBIC MAY choose one of the three but also something else?",
               "createdAt": "2020-12-11T09:40:37Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3527,7 +3529,7 @@
               "originalPosition": 59,
               "body": "It's the last one - `Or do we mean that CUBIC MAY choose one of the three but also something else?`\r\n\r\nShould I phrase it differently?\r\n\r\n",
               "createdAt": "2020-12-11T10:11:57Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3547,7 +3549,7 @@
               "originalPosition": 63,
               "body": "will wait for @lisongxu comment on this.",
               "createdAt": "2020-12-11T10:12:24Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3567,7 +3569,7 @@
               "originalPosition": 59,
               "body": "```suggestion\r\nCUBIC MAY implement an algorithm to detect spurious retransmissions,\r\nsuch as DSACK {{?RFC3708}}, Forward RTO-Recovery {{?RFC5682}}\r\nor Eifel {{?RFC3522}}. Once a spurious loss event is detected, CUBIC should\r\n```",
               "createdAt": "2020-12-11T10:35:02Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3587,7 +3589,7 @@
               "originalPosition": 63,
               "body": "At an undo, the current cwnd may or may not be lower than the saved prior_cwnd. If the current cwnd is already higher than the saved prior_cwnd, we do not need to undo. \r\n\r\nHow about?\r\n\r\n_When there is a loss event, A CUBIC implementation SHOULD save the current\r\nvalue of the following variables before the congestion window reduction._\r\n\r\n~~~\r\n    prior_cwnd = cwnd\r\n    prior_ssthresh = ssthresh\r\n    prior_W_max = W_max\r\n    prior_K = K\r\n    prior_epoch_start = epoch_start\r\n    prior_W_est = W_est\r\n~~~\r\n\r\n_..................  Once a spurious loss event is detected, CUBIC should restore the original values of the above mentioned variables as follows if the current cwnd is lower than prior_cwnd._\r\n\r\n~~~\r\n    if (cwnd < prior_cwnd) {\r\n        cwnd = prior_cwnd\r\n        ssthresh = prior_ssthresh\r\n        W_max = prior_W_max\r\n        K = prior_K\r\n        epoch_start = prior_epoch_start\r\n        W_est = prior_W_est\r\n    }\r\n~~~\r\n\r\n",
               "createdAt": "2020-12-11T14:09:41Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3607,7 +3609,7 @@
               "originalPosition": 63,
               "body": "Ah.. I am not sure about not reverting the state when `cwnd > prior_cwnd`, esp. the variables W_max, epoch_start and K as these dictate the CUBIC curve. For example, W_max for the spurious loss event will be lower than prior_W_max and hence CUBIC will enter Convex phase earlier.\r\nSpurious loss detection should not usually take more than a couple of RTTs and I think the safest thing to do here is to revert all state to previous state, i.e.\r\n```\r\n        cwnd = prior_cwnd\r\n        ssthresh = prior_ssthresh\r\n        W_max = prior_W_max\r\n        K = prior_K\r\n        epoch_start = prior_epoch_start\r\n        W_est = prior_W_est",
               "createdAt": "2020-12-12T03:12:10Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3627,7 +3629,7 @@
               "originalPosition": 59,
               "body": "done",
               "createdAt": "2020-12-12T03:16:27Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3647,7 +3649,7 @@
               "originalPosition": 63,
               "body": "Since the goal of the undo is to improve the performance of Cubic, it is reasonable to keep the current cwnd if it is already higher than prior_cwnd. This is why I like to restore cwnd only if cwnd<prior_cwnd. By the way, this is how current Linux TCP does.\r\n\r\nBut I am not sure whether we should restore other variables. Both are fine with me. Thanks.",
               "createdAt": "2020-12-12T03:30:57Z",
-              "updatedAt": "2020-12-12T06:55:19Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3667,7 +3669,7 @@
               "originalPosition": 63,
               "body": "ok, I added a special note for congestion window. Please take a look.",
               "createdAt": "2020-12-12T06:56:04Z",
-              "updatedAt": "2020-12-12T06:56:04Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3687,7 +3689,7 @@
               "originalPosition": 63,
               "body": "Hi Vidhi, I thought about it last night, and now I prefer the if-then method as explained below. \r\n\r\nThere are two possible scenarios for undo. \r\n\r\nFirst (usual cases), an undo happens soon after a spurious loss event, and the current cwnd at undo is still lower than prior_cwnd. In these cases, it makes sense to restore the previous values of all the variables (better performance and safe). \r\n\r\nSecond (unusual cases), an undo happens long after a spurious loss event, and as a result, the current cwnd at undo is already higher than prior_cwnd. In these cases, it makes sense to keep the current values of all the variables, because their prior values were measured and calculated too long ago and thus may not be good or accurate measurements of the current network condition (bandwidth, delay, ...)\r\n\r\nTherefore, the undo code is\r\n~~~\r\n    if (cwnd < prior_cwnd) {\r\n        cwnd = prior_cwnd\r\n        ssthresh = prior_ssthresh\r\n        W_max = prior_W_max\r\n        K = prior_K\r\n        epoch_start = prior_epoch_start\r\n        W_est = prior_W_est\r\n    }\r\n~~~\r\n\r\nHow do you think?\r\n\r\nThanks!",
               "createdAt": "2020-12-12T16:06:20Z",
-              "updatedAt": "2020-12-12T16:06:21Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
         },
@@ -3707,9 +3709,95 @@
               "originalPosition": 63,
               "body": "Sounds good. Will update the PR.",
               "createdAt": "2020-12-12T20:21:56Z",
-              "updatedAt": "2020-12-12T20:21:57Z"
+              "updatedAt": "2020-12-14T07:11:04Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxMDA1NzAy",
+          "commit": {
+            "abbreviatedOid": "b62432c"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-14T02:29:12Z",
+          "updatedAt": "2020-12-14T02:29:12Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Updated the PR. @lisongxu does this look ok?",
+              "createdAt": "2020-12-14T02:29:12Z",
+              "updatedAt": "2020-12-14T07:11:04Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxMDIzNTM4",
+          "commit": {
+            "abbreviatedOid": "b62432c"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-14T03:37:34Z",
+          "updatedAt": "2020-12-14T03:37:35Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Thanks, Vidhi! How about replacing \"In rare cases, when the detection happens long after a spurious loss event, \" with \"In rare cases, when the detection happens long after a spurious loss event and the current cwnd is already higher than the prior_cwnd,\"?\r\n\r\nThanks!",
+              "createdAt": "2020-12-14T03:37:34Z",
+              "updatedAt": "2020-12-14T07:11:04Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxMDM1MjU1",
+          "commit": {
+            "abbreviatedOid": "75f2ddc"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-14T04:25:52Z",
+          "updatedAt": "2020-12-14T04:25:52Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "sounds good. Updated it. Please review, thanks.",
+              "createdAt": "2020-12-14T04:25:52Z",
+              "updatedAt": "2020-12-14T07:11:04Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxMDM1ODAy",
+          "commit": {
+            "abbreviatedOid": "75f2ddc"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thank you, Vidhi!",
+          "createdAt": "2020-12-14T04:27:58Z",
+          "updatedAt": "2020-12-14T04:27:58Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxMDQ4OTQ1",
+          "commit": {
+            "abbreviatedOid": "75f2ddc"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks great. Thanks, @goelvidhi and @lisongxu.",
+          "createdAt": "2020-12-14T05:16:50Z",
+          "updatedAt": "2020-12-14T05:16:50Z",
+          "comments": []
         }
       ]
     },
@@ -3780,13 +3868,13 @@
       "labels": [],
       "body": "This uses the experimental `math` support in [kramdown-rfc2629](https://github.com/cabo/kramdown-rfc2629) to render Latex-style equations via [tex2svg](https://github.com/mathjax/mathjax-node-cli) and [asciitex](https://github.com/larseggert/asciiTeX).\r\n\r\nI'm still working through some issues with the toolchain, so this isn't ready for merging yet, but I wanted to give you a preview.",
       "createdAt": "2020-12-08T13:18:18Z",
-      "updatedAt": "2020-12-10T10:01:01Z",
+      "updatedAt": "2020-12-14T14:46:06Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
+      "baseRefOid": "bacd8983f5dff7c20284e7fb5299c970b980bf05",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "pretty-math",
-      "headRefOid": "34970508aeae308b1a8b776b7e68af105428f97a",
+      "headRefOid": "24d64a06c4efecf97d9bbf1920a7a9578ffba82b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3814,24 +3902,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM2MDU2MDA3",
       "title": "Initialization",
       "url": "https://github.com/NTAP/rfc8312bis/pull/35",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "lisongxu",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Removing variable w_last_max and keeping only w_max, for two reasons.\r\n\r\n1) w_last_max is not explicitly initialized in section 4.7 (timeout).\r\n\r\n2) simplify RFC and avoid confusion. ",
       "createdAt": "2020-12-10T16:21:19Z",
-      "updatedAt": "2020-12-12T02:47:26Z",
+      "updatedAt": "2020-12-14T07:10:00Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "caaa2bc9bb6e50886724a7dcfcf9ebf55a61f2d4",
       "headRepository": "lisongxu/rfc8312bis",
       "headRefName": "Initialization",
       "headRefOid": "cbac491e9b424f056a54c85ab09ab8b383755d42",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-12-14T07:10:00Z",
+      "mergedAt": "2020-12-14T07:10:00Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "bd1fcac0aba1b3960aaf3cb1cbc24b06d280a6bf"
+      },
       "comments": [
         {
           "author": "larseggert",
@@ -3860,6 +3950,13 @@
           "body": "> Looks great. Thanks @lisongxu.\r\n> Can we add the change log for this?\r\n\r\nYes, I will add that. \r\n\r\nAlso we should initialize W_est in case of timeout (similar to undo). ",
           "createdAt": "2020-12-11T14:16:16Z",
           "updatedAt": "2020-12-11T14:16:16Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@sangtaeha Hi Sangtae,  could you please read and review the changes? Thanks",
+          "createdAt": "2020-12-14T04:30:13Z",
+          "updatedAt": "2020-12-14T04:30:13Z"
         }
       ],
       "reviews": [
@@ -3887,6 +3984,19 @@
           "body": "",
           "createdAt": "2020-12-12T02:47:26Z",
           "updatedAt": "2020-12-12T02:47:26Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxMDQ2Nzk1",
+          "commit": {
+            "abbreviatedOid": "cbac491"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks @lisongxu ",
+          "createdAt": "2020-12-14T05:09:59Z",
+          "updatedAt": "2020-12-14T05:09:59Z",
           "comments": []
         }
       ]
