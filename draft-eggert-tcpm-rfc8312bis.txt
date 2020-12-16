@@ -109,10 +109,10 @@ Table of Contents
      8.1.  Normative References
      8.2.  Informative References
    Appendix A.  Acknowledgements
-   Appendix B.  Changes from RFC8312
+   Appendix B.  Evolution of CUBIC
      B.1.  Since draft-eggert-tcpm-rfc8312bis-00
      B.2.  Since RFC8312
-   Appendix C.  Changes from the Original Paper
+     B.3.  Since the Original Paper
    Authors' Addresses
 
 1.  Introduction
@@ -581,7 +581,7 @@ Table of Contents
    elapsed time since the beginning of the current congestion avoidance,
    _K_ is set to 0, and _W__(max) is set to the congestion window size
    at the beginning of the current congestion avoidance.  In addition,
-   for the tcp-friendliness region, W_est should be set to the
+   for the tcp-friendliness region, _W__(est) should be set to the
    congestion window size at the beginning of the current congestion
    avoidance.
 
@@ -983,9 +983,9 @@ Table of Contents
 
    [HR08]     Ha, S. and I. Rhee, "Hybrid Slow Start for High-Bandwidth
               and Long-Distance Networks", International Workshop
-              on Protocols for Fast Long-Distance Networks, 2008,
-              <https://pdfs.semanticscholar.org/25e9/
-              ef3f03315782c7f1cbcd31b587857adae7d1.pdf>.
+              on Protocols for Fast Long-Distance Networks, March 2008,
+              <http://www.hep.man.ac.uk/g/GDARN-IT/pfldnet2008/paper/
+              Sangate_Ha%20Final.pdf>.
 
    [HRX08]    Ha, S., Rhee, I., and L. Xu, "CUBIC: a new TCP-friendly
               high-speed TCP variant", ACM SIGOPS Operating Systems
@@ -1040,7 +1040,8 @@ Table of Contents
    [SXEZ19]   Sun, W., Xu, L., Elbaum, S., and D. Zhao, "Model-Agnostic
               and Efficient Exploration of Numerical State Space of
               Real-World TCP Congestion Control Implementations", USENIX
-              NSDI 2019, 2019.
+              NSDI 2019, February 2019,
+              <https://www.usenix.org/system/files/nsdi19-sun.pdf>.
 
    [XHR04]    Xu, L., Harfoush, K., and I. Rhee, "Binary Increase
               Congestion Control (BIC) for Fast Long-Distance Networks",
@@ -1052,7 +1053,7 @@ Appendix A.  Acknowledgements
    Richard Scheffenegger and Alexander Zimmermann originally co-authored
    [RFC8312].
 
-Appendix B.  Changes from RFC8312
+Appendix B.  Evolution of CUBIC
 
 B.1.  Since draft-eggert-tcpm-rfc8312bis-00
 
@@ -1076,8 +1077,9 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
    *  set alpha_(aimd) to 1 once _W__(est) reaches _W__(max) (#2
       (https://github.com/NTAP/rfc8312bis/issues/2))
 
-   *  add Vidhi as co-author (#17 (https://github.com/NTAP/rfc8312bis/
-      issues/17))
+   *  add Vidhi as co-author
+
+   *  (#17 (https://github.com/NTAP/rfc8312bis/issues/17))
 
    *  note for fast recovery during _cwnd_ decrease due to congestion
       event (#11 (https://github.com/NTAP/rfc8312bis11/issues/11))
@@ -1086,46 +1088,48 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
       (https://github.com/NTAP/rfc8312bis/issues/23))
 
    *  initialize _W__(est) after timeout and remove variable
-      W_(last_max) (#28 (https://github.com/NTAP/rfc8312bis/issues/28))
+      _W__(last_max) (#28 (https://github.com/NTAP/rfc8312bis/
+      issues/28))
 
 B.2.  Since RFC8312
 
-   *  converted to markdown and xml2rfc v3
+   *  converted to Markdown and xml2rfc v3
 
    *  updated references (as part of the conversion)
 
    *  updated author information
 
-   *  various whitespace changes
+   *  various formatting changes
 
    *  move to Standards Track
 
-Appendix C.  Changes from the Original Paper
+B.3.  Since the Original Paper
 
    CUBIC has gone through a few changes since the initial release
    [HRX08] of its algorithm and implementation.  Below we highlight the
    differences between its original paper and [RFC8312].
 
-   *  The original paper [HRX08] included the pseudocode of CUBIC
+   *  The original paper [HRX08] includes the pseudocode of CUBIC
       implementation using Linux's pluggable congestion control
       framework, which excludes system-specific optimizations.  The
       simplified pseudocode might be a good source to start with and
       understand CUBIC.
 
-   *  It also includes experimental results showing its performance and
-      fairness.
+   *  [HRX08] also includes experimental results showing its performance
+      {{and fairness.
 
-   *  The definition of beta_cubic constant was changed in [RFC8312].
-      For example, beta_cubic in the original paper was the window
-      decrease constant while [RFC8312] changed it to CUBIC
+   *  The definition of _beta__(cubic) constant was changed in
+      [RFC8312].  For example, _beta__(cubic) in the original paper was
+      the window decrease constant while [RFC8312] changed it to CUBIC
       multiplication decrease factor.  With this change, the current
       congestion window size after a loss event in [RFC8312] was
-      beta_cubic * W_max while it was (1-beta_cubic) * W_max in the
-      original paper.
+      _beta__(cubic) _W__(max) while it was (1-_beta__(cubic)) *
+      _W__(max) in the original paper.
 
-   *  Its pseudocode used W_last_max while [RFC8312] used W_max.
+   *  Its pseudocode used _W__(last_max) while [RFC8312] used _W__(max).
 
-   *  Its TCP friendly window was W_tcp while [RFC8312] used W_est.
+   *  Its TCP friendly window was W_(tcp) while [RFC8312] used
+      _W__(est).
 
 Authors' Addresses
 

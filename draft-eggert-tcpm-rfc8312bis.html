@@ -12,8 +12,8 @@
 <meta content="
        CUBIC is an extension to the current TCP standards. It differs from
 the current TCP standards only in the congestion control algorithm on
-the sender side. In particular, it uses a cubic function instead of
-a linear window increase function of the current TCP standards to
+the sender side. In particular, it uses a cubic function instead of a
+linear window increase function of the current TCP standards to
 improve scalability and stability under fast and long-distance
 networks. CUBIC and its predecessor algorithm have been adopted as
 defaults by Linux and have been used for many years. This document
@@ -884,8 +884,8 @@ address div.right {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">CUBIC is an extension to the current TCP standards. It differs from
 the current TCP standards only in the congestion control algorithm on
-the sender side. In particular, it uses a cubic function instead of
-a linear window increase function of the current TCP standards to
+the sender side. In particular, it uses a cubic function instead of a
+linear window increase function of the current TCP standards to
 improve scalability and stability under fast and long-distance
 networks. CUBIC and its predecessor algorithm have been adopted as
 defaults by Linux and have been used for many years. This document
@@ -899,12 +899,12 @@ CUBIC to conform to the current Linux version.<a href="#section-abstract-2" clas
       <h2 id="name-note-to-readers">
 <a href="#name-note-to-readers" class="section-name selfRef">Note to Readers</a>
       </h2>
-<p id="section-note.1-1">Discussion of this draft takes place on the <a href="mailto:tcpm@ietf.org">TCPM working group mailing
-list</a>, which is archived at
+<p id="section-note.1-1">Discussion of this draft takes place on the <a href="mailto:tcpm@ietf.org">TCPM working group
+mailing list</a>, which is archived at
 <span><a href="https://mailarchive.ietf.org/arch/browse/tcpm/">https://mailarchive.ietf.org/arch/browse/tcpm/</a></span>.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">Working Group information can be found at
-<span><a href="https://datatracker.ietf.org/wg/tcpm/">https://datatracker.ietf.org/wg/tcpm/</a></span>; source code and issues list for this
-draft can be found at <span><a href="https://github.com/NTAP/rfc8312bis">https://github.com/NTAP/rfc8312bis</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<span><a href="https://datatracker.ietf.org/wg/tcpm/">https://datatracker.ietf.org/wg/tcpm/</a></span>; source code and issues list
+for this draft can be found at <span><a href="https://github.com/NTAP/rfc8312bis">https://github.com/NTAP/rfc8312bis</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -953,130 +953,130 @@ draft can be found at <span><a href="https://github.com/NTAP/rfc8312bis">https:/
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.1">
+<nav class="toc"><ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.2">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions" class="xref">Conventions</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.3">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-design-principles-of-cubic" class="xref">Design Principles of CUBIC</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.4">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-cubic-congestion-control" class="xref">CUBIC Congestion Control</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-definitions" class="xref">Definitions</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.1.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.4.2.1.2.1">
                     <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="xref">4.1.1</a>.  <a href="#name-constants-of-interest" class="xref">Constants of interest</a><a href="#section-toc.1-1.4.2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.1.2.2">
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.1.2.2">
                     <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="xref">4.1.2</a>.  <a href="#name-variables-of-interest" class="xref">Variables of interest</a><a href="#section-toc.1-1.4.2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-window-increase-function" class="xref">Window Increase Function</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.3">
                 <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-tcp-friendly-region" class="xref">TCP-Friendly Region</a><a href="#section-toc.1-1.4.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.4">
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-concave-region" class="xref">Concave Region</a><a href="#section-toc.1-1.4.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.5">
                 <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-convex-region" class="xref">Convex Region</a><a href="#section-toc.1-1.4.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.6">
                 <p id="section-toc.1-1.4.2.6.1"><a href="#section-4.6" class="xref">4.6</a>.  <a href="#name-multiplicative-decrease" class="xref">Multiplicative Decrease</a><a href="#section-toc.1-1.4.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.7">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.7">
                 <p id="section-toc.1-1.4.2.7.1"><a href="#section-4.7" class="xref">4.7</a>.  <a href="#name-fast-convergence" class="xref">Fast Convergence</a><a href="#section-toc.1-1.4.2.7.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.8">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.8">
                 <p id="section-toc.1-1.4.2.8.1"><a href="#section-4.8" class="xref">4.8</a>.  <a href="#name-timeout" class="xref">Timeout</a><a href="#section-toc.1-1.4.2.8.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.9">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.9">
                 <p id="section-toc.1-1.4.2.9.1"><a href="#section-4.9" class="xref">4.9</a>.  <a href="#name-spurious-loss-events" class="xref">Spurious Loss events</a><a href="#section-toc.1-1.4.2.9.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.10">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.10">
                 <p id="section-toc.1-1.4.2.10.1"><a href="#section-4.10" class="xref">4.10</a>. <a href="#name-slow-start" class="xref">Slow Start</a><a href="#section-toc.1-1.4.2.10.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.5">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-discussion" class="xref">Discussion</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.5.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-fairness-to-standard-tcp" class="xref">Fairness to Standard TCP</a><a href="#section-toc.1-1.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-using-spare-capacity" class="xref">Using Spare Capacity</a><a href="#section-toc.1-1.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.3">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-difficult-environments" class="xref">Difficult Environments</a><a href="#section-toc.1-1.5.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-investigating-a-range-of-en" class="xref">Investigating a Range of Environments</a><a href="#section-toc.1-1.5.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.5">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.5">
                 <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-protection-against-congesti" class="xref">Protection against Congestion Collapse</a><a href="#section-toc.1-1.5.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.6">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.6">
                 <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="xref">5.6</a>.  <a href="#name-fairness-within-the-alterna" class="xref">Fairness within the Alternative Congestion Control Algorithm</a><a href="#section-toc.1-1.5.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.7">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.7">
                 <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="xref">5.7</a>.  <a href="#name-performance-with-misbehavin" class="xref">Performance with Misbehaving Nodes and Outside Attackers</a><a href="#section-toc.1-1.5.2.7.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.8">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.8">
                 <p id="section-toc.1-1.5.2.8.1"><a href="#section-5.8" class="xref">5.8</a>.  <a href="#name-behavior-for-application-li" class="xref">Behavior for Application-Limited Flows</a><a href="#section-toc.1-1.5.2.8.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.9">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.9">
                 <p id="section-toc.1-1.5.2.9.1"><a href="#section-5.9" class="xref">5.9</a>.  <a href="#name-responses-to-sudden-or-tran" class="xref">Responses to Sudden or Transient Events</a><a href="#section-toc.1-1.5.2.9.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.10">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.5.2.10">
                 <p id="section-toc.1-1.5.2.10.1"><a href="#section-5.10" class="xref">5.10</a>. <a href="#name-incremental-deployment" class="xref">Incremental Deployment</a><a href="#section-toc.1-1.5.2.10.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.6">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.7">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.8">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.8.2.1">
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.8.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.8.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.8.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.9">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-acknowledgements" class="xref">Acknowledgements</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-appendix.b" class="xref">Appendix B</a>.  <a href="#name-changes-from-rfc8312" class="xref">Changes from RFC8312</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
-<ul class="toc compact ulEmpty">
-<li class="toc compact ulEmpty" id="section-toc.1-1.10.2.1">
+          <li class="compact toc ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-appendix.b" class="xref">Appendix B</a>.  <a href="#name-evolution-of-cubic" class="xref">Evolution of CUBIC</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.10.2.1">
                 <p id="section-toc.1-1.10.2.1.1"><a href="#section-b.1" class="xref">B.1</a>.  <a href="#name-since-draft-eggert-tcpm-rfc" class="xref">Since draft-eggert-tcpm-rfc8312bis-00</a><a href="#section-toc.1-1.10.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc compact ulEmpty" id="section-toc.1-1.10.2.2">
+              <li class="compact toc ulEmpty" id="section-toc.1-1.10.2.2">
                 <p id="section-toc.1-1.10.2.2.1"><a href="#section-b.2" class="xref">B.2</a>.  <a href="#name-since-rfc8312" class="xref">Since RFC8312</a><a href="#section-toc.1-1.10.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-b.3" class="xref">B.3</a>.  <a href="#name-since-the-original-paper" class="xref">Since the Original Paper</a><a href="#section-toc.1-1.10.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-appendix.c" class="xref">Appendix C</a>.  <a href="#name-changes-from-the-original-p" class="xref">Changes from the Original Paper</a><a href="#section-toc.1-1.11.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="toc compact ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-appendix.d" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.12.1" class="pilcrow">¶</a></p>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-appendix.c" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.11.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </nav>
@@ -1088,34 +1088,34 @@ draft can be found at <span><a href="https://github.com/NTAP/rfc8312bis">https:/
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">The low utilization problem of TCP in fast long-distance networks is
-well documented in <span>[<a href="#K03" class="xref">K03</a>]</span> and <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. This problem arises from a
-slow increase of the congestion window following a congestion event
+well documented in <span>[<a href="#K03" class="xref">K03</a>]</span> and <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. This problem arises from
+a slow increase of the congestion window following a congestion event
 in a network with a large bandwidth-delay product (BDP). <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span>
 indicates that this problem is frequently observed even in the range
 of congestion window sizes over several hundreds of packets. This
 problem is equally applicable to all Reno-style TCP standards and
 their variants, including TCP-Reno <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, TCP-NewReno
-<span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>, SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>, and TFRC <span>[<a href="#RFC5348" class="xref">RFC5348</a>]</span>, which
-use the same linear increase function for window growth, which we refer to
-collectively as "Standard TCP" below.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>, SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>, and TFRC <span>[<a href="#RFC5348" class="xref">RFC5348</a>]</span>,
+which use the same linear increase function for window growth, which
+we refer to collectively as "Standard TCP" below.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">CUBIC, originally proposed in <span>[<a href="#HRX08" class="xref">HRX08</a>]</span>, is a modification to the
 congestion control algorithm of Standard TCP to remedy this problem.
 This document describes the most recent specification of CUBIC.
 Specifically, CUBIC uses a cubic function instead of a linear window
-increase function of Standard TCP to improve scalability and
-stability under fast and long-distance networks.<a href="#section-1-2" class="pilcrow">¶</a></p>
+increase function of Standard TCP to improve scalability and stability
+under fast and long-distance networks.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Binary Increase Congestion Control (BIC-TCP) <span>[<a href="#XHR04" class="xref">XHR04</a>]</span>, a predecessor
-of CUBIC, was selected as the default TCP congestion control
-algorithm by Linux in the year 2005 and has been used for several
-years by the Internet community at large. CUBIC uses a similar
-window increase function as BIC-TCP and is designed to be less
-aggressive and fairer to Standard TCP in bandwidth usage than BIC-TCP
-while maintaining the strengths of BIC-TCP such as stability, window
-scalability, and RTT fairness. CUBIC has already replaced BIC-TCP as
-the default TCP congestion control algorithm in Linux and has been
-deployed globally by Linux. Through extensive testing in various
-Internet scenarios, we believe that CUBIC is safe for testing and
-deployment in the global Internet.<a href="#section-1-3" class="pilcrow">¶</a></p>
+of CUBIC, was selected as the default TCP congestion control algorithm
+by Linux in the year 2005 and has been used for several years by the
+Internet community at large. CUBIC uses a similar window increase
+function as BIC-TCP and is designed to be less aggressive and fairer
+to Standard TCP in bandwidth usage than BIC-TCP while maintaining the
+strengths of BIC-TCP such as stability, window scalability, and RTT
+fairness. CUBIC has already replaced BIC-TCP as the default TCP
+congestion control algorithm in Linux and has been deployed globally
+by Linux. Through extensive testing in various Internet scenarios, we
+believe that CUBIC is safe for testing and deployment in the global
+Internet.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">In the following sections, we first briefly explain the design
 principles of CUBIC, then provide the exact specification of CUBIC,
 and finally discuss the safety features of CUBIC following the
@@ -1153,109 +1153,107 @@ convex function.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 <dt id="section-3-2.3">
 Principle 2:  </dt>
         <dd style="margin-left: 1.5em" id="section-3-2.4">
-          <p id="section-3-2.4.1">To be TCP-friendly, CUBIC is designed to behave like
-Standard TCP in networks with short RTTs and small bandwidth where
-Standard TCP performs well.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.4.1">To be TCP-friendly, CUBIC is designed to behave like Standard TCP in
+networks with short RTTs and small bandwidth where Standard TCP
+performs well.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-3-2.5">
 Principle 3:  </dt>
         <dd style="margin-left: 1.5em" id="section-3-2.6">
-          <p id="section-3-2.6.1">For RTT-fairness, CUBIC is designed to achieve linear
-bandwidth sharing among flows with different RTTs.<a href="#section-3-2.6.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.6.1">For RTT-fairness, CUBIC is designed to achieve linear bandwidth
+sharing among flows with different RTTs.<a href="#section-3-2.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-3-2.7">
 Principle 4:  </dt>
         <dd style="margin-left: 1.5em" id="section-3-2.8">
-          <p id="section-3-2.8.1">CUBIC appropriately sets its multiplicative window
-decrease factor in order to balance between the scalability and
-convergence speed.<a href="#section-3-2.8.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.8.1">CUBIC appropriately sets its multiplicative window decrease factor
+in order to balance between the scalability and convergence speed.<a href="#section-3-2.8.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
 <p id="section-3-3">Principle 1: For better network utilization and stability, CUBIC
-<span>[<a href="#HRX08" class="xref">HRX08</a>]</span> uses a cubic window increase function in terms of the elapsed
-time from the last congestion event. While most alternative
+<span>[<a href="#HRX08" class="xref">HRX08</a>]</span> uses a cubic window increase function in terms of the
+elapsed time from the last congestion event. While most alternative
 congestion control algorithms to Standard TCP increase the congestion
 window using convex functions, CUBIC uses both the concave and convex
 profiles of a cubic function for window growth. After a window
 reduction in response to a congestion event is detected by duplicate
 ACKs or Explicit Congestion Notification-Echo (ECN-Echo) ACKs
 <span>[<a href="#RFC3168" class="xref">RFC3168</a>]</span>, CUBIC registers the congestion window size where it got
-the congestion event as <em>W</em><sub>max</sub> and performs a multiplicative decrease
-of congestion window. After it enters into congestion avoidance, it
-starts to increase the congestion window using the concave profile of
-the cubic function. The cubic function is set to have its plateau at
-<em>W</em><sub>max</sub> so that the concave window increase continues until the window
-size becomes <em>W</em><sub>max</sub>. After that, the cubic function turns into a
-convex profile and the convex window increase begins. This style of
-window adjustment (concave and then convex) improves the algorithm
-stability while maintaining high network utilization <span>[<a href="#CEHRX07" class="xref">CEHRX07</a>]</span>. This
-is because the window size remains almost constant, forming a plateau
-around <em>W</em><sub>max</sub> where network utilization is deemed highest. Under
-steady state, most window size samples of CUBIC are close to <em>W</em><sub>max</sub>,
-thus promoting high network utilization and stability. Note that
-those congestion control algorithms using only convex functions to
-increase the congestion window size have the maximum increments
-around <em>W</em><sub>max</sub>, and thus introduce a large number of packet bursts
-around the saturation point of the network, likely causing frequent
-global loss synchronizations.<a href="#section-3-3" class="pilcrow">¶</a></p>
+the congestion event as <em>W</em><sub>max</sub> and performs a
+multiplicative decrease of congestion window. After it enters into
+congestion avoidance, it starts to increase the congestion window
+using the concave profile of the cubic function. The cubic function is
+set to have its plateau at <em>W</em><sub>max</sub> so that the concave
+window increase continues until the window size becomes
+<em>W</em><sub>max</sub>. After that, the cubic function turns into a convex
+profile and the convex window increase begins. This style of window
+adjustment (concave and then convex) improves the algorithm stability
+while maintaining high network utilization <span>[<a href="#CEHRX07" class="xref">CEHRX07</a>]</span>. This is
+because the window size remains almost constant, forming a plateau
+around <em>W</em><sub>max</sub> where network utilization is deemed highest.
+Under steady state, most window size samples of CUBIC are close to
+<em>W</em><sub>max</sub>, thus promoting high network utilization and
+stability. Note that those congestion control algorithms using only
+convex functions to increase the congestion window size have the
+maximum increments around <em>W</em><sub>max</sub>, and thus introduce a
+large number of packet bursts around the saturation point of the
+network, likely causing frequent global loss synchronizations.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">Principle 2: CUBIC promotes per-flow fairness to Standard TCP. Note
 that Standard TCP performs well under short RTT and small bandwidth
 (or small BDP) networks. There is only a scalability problem in
 networks with long RTTs and large bandwidth (or large BDP). An
 alternative congestion control algorithm to Standard TCP designed to
 be friendly to Standard TCP on a per-flow basis must operate to
-increase its congestion window less aggressively in small BDP
-networks than in large BDP networks. The aggressiveness of CUBIC
-mainly depends on the maximum window size before a window reduction,
-which is smaller in small BDP networks than in large BDP networks.
-Thus, CUBIC increases its congestion window less aggressively in
-small BDP networks than in large BDP networks. Furthermore, in cases
-when the cubic function of CUBIC increases its congestion window less
+increase its congestion window less aggressively in small BDP networks
+than in large BDP networks. The aggressiveness of CUBIC mainly depends
+on the maximum window size before a window reduction, which is smaller
+in small BDP networks than in large BDP networks. Thus, CUBIC
+increases its congestion window less aggressively in small BDP
+networks than in large BDP networks. Furthermore, in cases when the
+cubic function of CUBIC increases its congestion window less
 aggressively than Standard TCP, CUBIC simply follows the window size
 of Standard TCP to ensure that CUBIC achieves at least the same
-throughput as Standard TCP in small BDP networks. We call this
-region where CUBIC behaves like Standard TCP, the "TCP-friendly
-region".<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Principle 3: Two CUBIC flows with different RTTs have their
-throughput ratio linearly proportional to the inverse of their RTT
-ratio, where the throughput of a flow is approximately the size of
-its congestion window divided by its RTT. Specifically, CUBIC
-maintains a window increase rate independent of RTTs outside of the
-TCP-friendly region, and thus flows with different RTTs have similar
-congestion window sizes under steady state when they operate outside
-the TCP-friendly region. This notion of a linear throughput ratio is
-similar to that of Standard TCP under high statistical multiplexing
-environments where packet losses are independent of individual flow
-rates. However, under low statistical multiplexing environments, the
-throughput ratio of Standard TCP flows with different RTTs is
-quadratically proportional to the inverse of their RTT ratio <span>[<a href="#XHR04" class="xref">XHR04</a>]</span>.
-CUBIC always ensures the linear throughput ratio independent of the
-levels of statistical multiplexing. This is an improvement over
-Standard TCP. While there is no consensus on particular throughput
-ratios of different RTT flows, we believe that under wired Internet,
-use of a linear throughput ratio seems more reasonable than equal
-throughputs (i.e., the same throughput for flows with different RTTs)
-or a higher-order throughput ratio (e.g., a quadratical throughput
-ratio of Standard TCP under low statistical multiplexing
-environments).<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">Principle 4: To balance between the scalability and convergence
-speed, CUBIC sets the multiplicative window decrease factor to 0.7
-while Standard TCP uses 0.5. While this improves the scalability of
-CUBIC, a side effect of this decision is slower convergence,
-especially under low statistical multiplexing environments. This
-design choice is following the observation that the author of
-HighSpeed TCP (HSTCP) <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span> has made along with other researchers
-(e.g., <span>[<a href="#GV02" class="xref">GV02</a>]</span>): the current Internet becomes more asynchronous with
-less frequent loss synchronizations with high statistical
-multiplexing. Under this environment, even strict Multiplicative-Increase
-Multiplicative-Decrease (MIMD) can converge. CUBIC flows
-with the same RTT always converge to the same throughput independent
-of statistical multiplexing, thus achieving intra-algorithm fairness.
-We also find that under the environments with sufficient statistical
-multiplexing, the convergence speed of CUBIC flows is reasonable.<a href="#section-3-6" class="pilcrow">¶</a></p>
+throughput as Standard TCP in small BDP networks. We call this region
+where CUBIC behaves like Standard TCP, the "TCP-friendly region".<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">Principle 3: Two CUBIC flows with different RTTs have their throughput
+ratio linearly proportional to the inverse of their RTT ratio, where
+the throughput of a flow is approximately the size of its congestion
+window divided by its RTT. Specifically, CUBIC maintains a window
+increase rate independent of RTTs outside of the TCP-friendly region,
+and thus flows with different RTTs have similar congestion window
+sizes under steady state when they operate outside the TCP-friendly
+region. This notion of a linear throughput ratio is similar to that of
+Standard TCP under high statistical multiplexing environments where
+packet losses are independent of individual flow rates. However, under
+low statistical multiplexing environments, the throughput ratio of
+Standard TCP flows with different RTTs is quadratically proportional
+to the inverse of their RTT ratio <span>[<a href="#XHR04" class="xref">XHR04</a>]</span>. CUBIC always ensures the
+linear throughput ratio independent of the levels of statistical
+multiplexing. This is an improvement over Standard TCP. While there is
+no consensus on particular throughput ratios of different RTT flows,
+we believe that under wired Internet, use of a linear throughput ratio
+seems more reasonable than equal throughputs (i.e., the same
+throughput for flows with different RTTs) or a higher-order throughput
+ratio (e.g., a quadratical throughput ratio of Standard TCP under low
+statistical multiplexing environments).<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">Principle 4: To balance between the scalability and convergence speed,
+CUBIC sets the multiplicative window decrease factor to 0.7 while
+Standard TCP uses 0.5. While this improves the scalability of CUBIC, a
+side effect of this decision is slower convergence, especially under
+low statistical multiplexing environments. This design choice is
+following the observation that the author of HighSpeed TCP (HSTCP)
+<span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span> has made along with other researchers (e.g., <span>[<a href="#GV02" class="xref">GV02</a>]</span>):
+the current Internet becomes more asynchronous with less frequent loss
+synchronizations with high statistical multiplexing. Under this
+environment, even strict Multiplicative-Increase
+Multiplicative-Decrease (MIMD) can converge. CUBIC flows with the same
+RTT always converge to the same throughput independent of statistical
+multiplexing, thus achieving intra-algorithm fairness. We also find
+that under the environments with sufficient statistical multiplexing,
+the convergence speed of CUBIC flows is reasonable.<a href="#section-3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cubic-congestion-control">
@@ -1373,11 +1371,11 @@ approach similar to TCP-NewReno congestion controller<a href="#section-4.1.2-11"
 <p id="section-4.2-1">CUBIC maintains the acknowledgment (ACK) clocking of Standard TCP by
 increasing the congestion window only at the reception of an ACK. It
 does not make any change to the fast recovery and retransmit of TCP,
-such as TCP-NewReno <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>. During congestion avoidance
-after a congestion event where a packet loss is detected by duplicate
-ACKs or a network congestion is detected by ACKs with ECN-Echo flags
-<span>[<a href="#RFC3168" class="xref">RFC3168</a>]</span>, CUBIC changes the window increase function of Standard
-TCP.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+such as TCP-NewReno <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>. During congestion
+avoidance after a congestion event where a packet loss is detected by
+duplicate ACKs or a network congestion is detected by ACKs with
+ECN-Echo flags <span>[<a href="#RFC3168" class="xref">RFC3168</a>]</span>, CUBIC changes the window increase
+function of Standard TCP.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">CUBIC uses the following window increase function:<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <div id="eq1">
 <figure id="figure-1">
@@ -1497,11 +1495,11 @@ current congestion avoidance stage, that is,<a href="#section-4.2-4" class="pilc
             </svg><a href="#section-4.2-5.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.2-6">where <em>epoch_start</em> is the time at which the current
-congestion avoidance stage starts. <em>K</em> is the time period that the
-above function takes to increase the current window size to <em>W</em><sub>max</sub>
-if there are no further congestion events and is calculated using
-the following equation:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+<p id="section-4.2-6">where <em>epoch_start</em> is the time at which the current congestion
+avoidance stage starts. <em>K</em> is the time period that the above function
+takes to increase the current window size to <em>W</em><sub>max</sub> if
+there are no further congestion events and is calculated using the
+following equation:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
 <div id="eq2">
 <figure id="figure-2">
           <div id="section-4.2-7.1">
@@ -1559,14 +1557,14 @@ the following equation:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
 <p id="section-4.2-8">where <em>cwnd</em> is the congestion window at the beginning of the current
 congestion avoidance stage. <em>cwnd</em> is calculated as described in
 <a href="#mult-dec" class="xref">Section 4.6</a> when a congestion event is detected, although
-implementations can further adjust <em>cwnd</em> based on other fast
-recovery mechanisms. In special cases, if <em>cwnd</em> is greater than
+implementations can further adjust <em>cwnd</em> based on other fast recovery
+mechanisms. In special cases, if <em>cwnd</em> is greater than
 <em>W</em><sub>max</sub>, <em>K</em> is set to 0.<a href="#section-4.2-8" class="pilcrow">¶</a></p>
 <p id="section-4.2-9">Upon receiving an ACK during congestion avoidance, CUBIC computes the
 <em>target</em> congestion window size after the next RTT using <a href="#eq1" class="xref">Figure 1</a> as
-follows, where RTT is the smoothed round-trip time. The lower and upper
-bounds below ensure that CUBIC's congestion window increase rate is
-non-decreasing and is less than the increase rate of slow start.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+follows, where RTT is the smoothed round-trip time. The lower and
+upper bounds below ensure that CUBIC's congestion window increase rate
+is non-decreasing and is less than the increase rate of slow start.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
 <div id="section-4.2-10">
           <div class="artwork art-svg alignCenter" id="section-4.2-10.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="9.176ex" role="img" viewBox="0 -2226.5 25764.2 3950.7" width="59.84ex">
@@ -1766,13 +1764,13 @@ and <em>cwnd</em> is less than <em>W</em><sub>max</sub>.<a href="#section-4.2-12
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-tcp-friendly-region" class="section-name selfRef">TCP-Friendly Region</a>
         </h3>
 <p id="section-4.3-1">Standard TCP performs well in certain types of networks, for example,
-under short RTT and small bandwidth (or small BDP) networks. In
-these networks, we use the TCP-friendly region to ensure that CUBIC
-achieves at least the same throughput as Standard TCP.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+under short RTT and small bandwidth (or small BDP) networks. In these
+networks, we use the TCP-friendly region to ensure that CUBIC achieves
+at least the same throughput as Standard TCP.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.3-2">The TCP-friendly region is designed according to the analysis
 described in <span>[<a href="#FHP00" class="xref">FHP00</a>]</span>. The analysis studies the performance of an
-Additive Increase and Multiplicative Decrease (AIMD) algorithm with
-an additive factor of <em></em><span class="contact-name">α</span><sub>aimd</sub> (segments per RTT) and a
+Additive Increase and Multiplicative Decrease (AIMD) algorithm with an
+additive factor of <em></em><span class="contact-name">α</span><sub>aimd</sub> (segments per RTT) and a
 multiplicative factor of <em></em><span class="contact-name">β</span><sub>aimd</sub>, denoted by
 AIMD(<em></em><span class="contact-name">α</span><sub>aimd</sub>, <em></em><span class="contact-name">β</span><sub>aimd</sub>).
 Specifically, the average congestion window size of
@@ -1847,8 +1845,8 @@ AIMD(<em></em><span class="contact-name">α</span><sub>aimd</sub>, <em></em><spa
             </svg><a href="#section-4.3-3.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.3-4">achieves the same average
-window size as Standard TCP that uses AIMD(1, 0.5).<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">achieves the same average window size as Standard TCP that uses
+AIMD(1, 0.5).<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 <div id="eq3">
 <figure id="figure-3">
           <div id="section-4.3-5.1">
@@ -2068,11 +2066,12 @@ size <em>W</em><sub>est</sub> of AIMD(<em></em><span class="contact-name">α</sp
 <p id="section-4.3-8">which achieves the same average window size as Standard TCP. When
 receiving an ACK in congestion avoidance (<em>cwnd</em> could be greater than
 or less than <em>W</em><sub>max</sub>), CUBIC checks whether
-W<sub>cubic</sub>(t) is less than <em>W</em><sub>est</sub>. If so, CUBIC is in
-the TCP-friendly region and <em>cwnd</em> SHOULD be set to <em>W</em><sub>est</sub> at
-each reception of an ACK.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
-<p id="section-4.3-9"><em>W</em><sub>est</sub> is set equal to <em>cwnd</em> at the start of the congestion avoidance
-stage. After that, on every ACK, <em>W</em><sub>est</sub> is updated using <a href="#eq4" class="xref">Figure 4</a>.<a href="#section-4.3-9" class="pilcrow">¶</a></p>
+W<sub>cubic</sub>(t) is less than <em>W</em><sub>est</sub>. If so, CUBIC is
+in the TCP-friendly region and <em>cwnd</em> SHOULD be set to
+<em>W</em><sub>est</sub> at each reception of an ACK.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
+<p id="section-4.3-9"><em>W</em><sub>est</sub> is set equal to <em>cwnd</em> at the start of the
+congestion avoidance stage. After that, on every ACK,
+<em>W</em><sub>est</sub> is updated using <a href="#eq4" class="xref">Figure 4</a>.<a href="#section-4.3-9" class="pilcrow">¶</a></p>
 <div id="eq4">
 <figure id="figure-4">
           <div id="section-4.3-10.1">
@@ -2159,9 +2158,9 @@ stage. After that, on every ACK, <em>W</em><sub>est</sub> is updated using <a hr
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a></figcaption></figure>
 </div>
 <p id="section-4.3-11">Note that once <em>W</em><sub>est</sub> reaches <em>W</em><sub>max</sub>, that is,
-<em>W</em><sub>est</sub> &gt;= <em>W</em><sub>max</sub>, <em></em><span class="contact-name">α</span><sub>aimd</sub> SHOULD be
-set to 1 to achieve the same congestion
-window size as standard TCP that uses AIMD.<a href="#section-4.3-11" class="pilcrow">¶</a></p>
+<em>W</em><sub>est</sub> &gt;= <em>W</em><sub>max</sub>, <em></em><span class="contact-name">α</span><sub>aimd</sub>
+SHOULD be set to 1 to achieve the same congestion window size as
+standard TCP that uses AIMD.<a href="#section-4.3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="concave-region">
@@ -2170,8 +2169,9 @@ window size as standard TCP that uses AIMD.<a href="#section-4.3-11" class="pilc
 <a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-concave-region" class="section-name selfRef">Concave Region</a>
         </h3>
 <p id="section-4.4-1">When receiving an ACK in congestion avoidance, if CUBIC is not in the
-TCP-friendly region and <em>cwnd</em> is less than <em>W</em><sub>max</sub>, then CUBIC is in the
-concave region. In this region, <em>cwnd</em> MUST be incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+TCP-friendly region and <em>cwnd</em> is less than <em>W</em><sub>max</sub>, then
+CUBIC is in the concave region. In this region, <em>cwnd</em> MUST be
+incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <div id="section-4.4-2">
           <div class="artwork art-svg alignCenter" id="section-4.4-2.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.343ex" role="img" viewBox="0 -1508.9 6186.9 2300.3" width="14.37ex">
@@ -2224,18 +2224,18 @@ calculated as described in <a href="#win-inc" class="xref">Section 4.2</a>.<a hr
 <a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-convex-region" class="section-name selfRef">Convex Region</a>
         </h3>
 <p id="section-4.5-1">When receiving an ACK in congestion avoidance, if CUBIC is not in the
-TCP-friendly region and <em>cwnd</em> is larger than or equal to <em>W</em><sub>max</sub>, then
-CUBIC is in the convex region. The convex region indicates that the
-network conditions might have been perturbed since the last
-congestion event, possibly implying more available bandwidth after
-some flow departures. Since the Internet is highly asynchronous,
-some amount of perturbation is always possible without causing a
-major change in available bandwidth. In this region, CUBIC is being
-very careful by very slowly increasing its window size. The convex
-profile ensures that the window increases very slowly at the
-beginning and gradually increases its increase rate. We also call
-this region the "maximum probing phase" since CUBIC is searching for
-a new <em>W</em><sub>max</sub>. In this region, <em>cwnd</em> MUST be incremented by<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+TCP-friendly region and <em>cwnd</em> is larger than or equal to
+<em>W</em><sub>max</sub>, then CUBIC is in the convex region. The convex
+region indicates that the network conditions might have been perturbed
+since the last congestion event, possibly implying more available
+bandwidth after some flow departures. Since the Internet is highly
+asynchronous, some amount of perturbation is always possible without
+causing a major change in available bandwidth. In this region, CUBIC
+is being very careful by very slowly increasing its window size. The
+convex profile ensures that the window increases very slowly at the
+beginning and gradually increases its increase rate. We also call this
+region the "maximum probing phase" since CUBIC is searching for a new
+<em>W</em><sub>max</sub>. In this region, <em>cwnd</em> MUST be incremented by<a href="#section-4.5-1" class="pilcrow">¶</a></p>
 <div id="section-4.5-2">
           <div class="artwork art-svg alignCenter" id="section-4.5-2.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.343ex" role="img" viewBox="0 -1508.9 6186.9 2300.3" width="14.37ex">
@@ -2288,12 +2288,12 @@ calculated as described in <a href="#win-inc" class="xref">Section 4.2</a>.<a hr
 <a href="#section-4.6" class="section-number selfRef">4.6. </a><a href="#name-multiplicative-decrease" class="section-name selfRef">Multiplicative Decrease</a>
         </h3>
 <p id="section-4.6-1">When a packet loss is detected by duplicate ACKs or a network
-congestion is detected by receiving packets marked with ECN-Echo (ECE),
-CUBIC updates its <em>W</em><sub>max</sub> and reduces its <em>cwnd</em> and <em>ssthresh</em> immediately
-as below. For both packet loss and congestion detection through ECN,
-the sender MAY employ a fast recovery algorithm to gradually adjust the
-congestion window to its new reduced value. Parameter <em></em><span class="contact-name">β</span><sub>cubic</sub>
-SHOULD be set to 0.7.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
+congestion is detected by receiving packets marked with ECN-Echo
+(ECE), CUBIC updates its <em>W</em><sub>max</sub> and reduces its <em>cwnd</em> and
+<em>ssthresh</em> immediately as below. For both packet loss and congestion
+detection through ECN, the sender MAY employ a fast recovery algorithm
+to gradually adjust the congestion window to its new reduced value.
+Parameter <em></em><span class="contact-name">β</span><sub>cubic</sub> SHOULD be set to 0.7.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
 <div id="section-4.6-2">
           <div class="artwork art-svg alignCenter" id="section-4.6-2.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="9.509ex" role="img" viewBox="0 -2298.3 24417.8 4094.3" width="56.712ex">
@@ -2490,11 +2490,11 @@ SHOULD be set to 0.7.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
 </div>
 </div>
 <p id="section-4.6-3">A side effect of setting <em></em><span class="contact-name">β</span><sub>cubic</sub> to a value bigger
-than 0.5 is
-slower convergence. We believe that while a more adaptive setting of
-<em></em><span class="contact-name">β</span><sub>cubic</sub> could result in faster convergence, it will make the
-analysis of CUBIC much harder. This adaptive adjustment of
-<em></em><span class="contact-name">β</span><sub>cubic</sub> is an item for the next version of CUBIC.<a href="#section-4.6-3" class="pilcrow">¶</a></p>
+than 0.5 is slower convergence. We believe that while a more adaptive
+setting of <em></em><span class="contact-name">β</span><sub>cubic</sub> could result in faster
+convergence, it will make the analysis of CUBIC much harder. This
+adaptive adjustment of <em></em><span class="contact-name">β</span><sub>cubic</sub> is an item for the
+next version of CUBIC.<a href="#section-4.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fast-convergence">
@@ -2509,8 +2509,9 @@ some room for growth if the existing flows have been using all the
 bandwidth of the network. To speed up this bandwidth release by
 existing flows, the following mechanism called "fast convergence"
 SHOULD be implemented.<a href="#section-4.7-1" class="pilcrow">¶</a></p>
-<p id="section-4.7-2">With fast convergence, when a congestion event occurs, we update <em>W</em><sub>max</sub>
-as follows before the window reduction as described in <a href="#convex-region" class="xref">Section 4.5</a>.<a href="#section-4.7-2" class="pilcrow">¶</a></p>
+<p id="section-4.7-2">With fast convergence, when a congestion event occurs, we update
+<em>W</em><sub>max</sub> as follows before the window reduction as described
+in <a href="#convex-region" class="xref">Section 4.5</a>.<a href="#section-4.7-2" class="pilcrow">¶</a></p>
 <div id="section-4.7-3">
           <div class="artwork art-svg alignCenter" id="section-4.7-3.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.509ex" role="img" viewBox="0 -1867.7 29662.3 3233.2" width="68.893ex">
@@ -2688,18 +2689,19 @@ as follows before the window reduction as described in <a href="#convex-region" 
             </svg><a href="#section-4.7-3.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.7-4">At a congestion event, if the current <em>cwnd</em> is less than <em>W</em><sub>max</sub>, this
-indicates that the saturation point experienced by this flow is getting
-reduced because of the change in available bandwidth.  Then we allow
-this flow to release more bandwidth by reducing <em>W</em><sub>max</sub> further.  This
-action effectively lengthens the time for this flow to increase its
-congestion window because the reduced <em>W</em><sub>max</sub> forces the flow to have
-the plateau earlier.  This allows more time for the new flow to catch
-up to its congestion window size.<a href="#section-4.7-4" class="pilcrow">¶</a></p>
+<p id="section-4.7-4">At a congestion event, if the current <em>cwnd</em> is less than
+<em>W</em><sub>max</sub>, this indicates that the saturation point
+experienced by this flow is getting reduced because of the change in
+available bandwidth.  Then we allow this flow to release more
+bandwidth by reducing <em>W</em><sub>max</sub> further.  This action
+effectively lengthens the time for this flow to increase its
+congestion window because the reduced <em>W</em><sub>max</sub> forces the
+flow to have the plateau earlier.  This allows more time for the new
+flow to catch up to its congestion window size.<a href="#section-4.7-4" class="pilcrow">¶</a></p>
 <p id="section-4.7-5">The fast convergence is designed for network environments with
-multiple CUBIC flows. In network environments with only a single
-CUBIC flow and without any other traffic, the fast convergence SHOULD
-be disabled.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
+multiple CUBIC flows. In network environments with only a single CUBIC
+flow and without any other traffic, the fast convergence SHOULD be
+disabled.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="timeout">
@@ -2708,15 +2710,17 @@ be disabled.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
 <a href="#section-4.8" class="section-number selfRef">4.8. </a><a href="#name-timeout" class="section-name selfRef">Timeout</a>
         </h3>
 <p id="section-4.8-1">In case of timeout, CUBIC follows Standard TCP to reduce <em>cwnd</em>
-          <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, but sets <em>ssthresh</em> using <em></em><span class="contact-name">β</span><sub>cubic</sub> (same as in
-<a href="#mult-dec" class="xref">Section 4.6</a>) that is different from Standard TCP <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
-<p id="section-4.8-2">During the first congestion avoidance after a timeout, CUBIC
-increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>, where t is the
-elapsed time since the beginning of the current congestion avoidance,
-<em>K</em> is set to 0, and <em>W</em><sub>max</sub> is set to the congestion window size at the
+          <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, but sets <em>ssthresh</em> using <em></em><span class="contact-name">β</span><sub>cubic</sub>
+(same as in <a href="#mult-dec" class="xref">Section 4.6</a>) that is different from Standard TCP
+<span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
+<p id="section-4.8-2">During the first congestion avoidance after a timeout, CUBIC increases
+its congestion window size using <a href="#eq1" class="xref">Figure 1</a>, where t is the elapsed time
+since the beginning of the current congestion avoidance, <em>K</em> is set to
+0, and <em>W</em><sub>max</sub> is set to the congestion window size at the
 beginning of the current congestion avoidance. In addition, for the
-tcp-friendliness region, W_est should be set to the congestion window
-size at the beginning of the current congestion avoidance.<a href="#section-4.8-2" class="pilcrow">¶</a></p>
+tcp-friendliness region, <em>W</em><sub>est</sub> should be set to the
+congestion window size at the beginning of the current congestion
+avoidance.<a href="#section-4.8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="spurious-loss-events">
@@ -2724,8 +2728,8 @@ size at the beginning of the current congestion avoidance.<a href="#section-4.8-
         <h3 id="name-spurious-loss-events">
 <a href="#section-4.9" class="section-number selfRef">4.9. </a><a href="#name-spurious-loss-events" class="section-name selfRef">Spurious Loss events</a>
         </h3>
-<p id="section-4.9-1">For the case where CUBIC reduces its congestion window in response
-to detection of packet loss via duplicate ACKs or timeout, there is a
+<p id="section-4.9-1">For the case where CUBIC reduces its congestion window in response to
+detection of packet loss via duplicate ACKs or timeout, there is a
 possibility that the missing ACK would arrive after the congestion
 window reduction and the corresponding packet retransmission. For
 example, packet reordering which is common in networks could trigger
@@ -2733,8 +2737,9 @@ this behavior. A high degree of packet reordering could cause multiple
 events of congestion window reduction where spurious losses are
 incorrectly interpreted as congestion signals, thus degrading CUBIC's
 performance significantly.<a href="#section-4.9-1" class="pilcrow">¶</a></p>
-<p id="section-4.9-2">When there is a loss event, a CUBIC implementation SHOULD save the current
-value of the following variables before the congestion window reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
+<p id="section-4.9-2">When there is a loss event, a CUBIC implementation SHOULD save the
+current value of the following variables before the congestion window
+reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
 <div id="section-4.9-3">
           <div class="artwork art-svg alignCenter" id="section-4.9-3.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="19.176ex" role="img" viewBox="0 -4379.3 13744.6 8256.3" width="31.923ex">
@@ -2902,12 +2907,12 @@ value of the following variables before the congestion window reduction.<a href=
 </div>
 </div>
 <p id="section-4.9-4">CUBIC MAY implement an algorithm to detect spurious retransmissions,
-such as DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span>, Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span> or
-Eifel <span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious loss event is detected, CUBIC SHOULD
+such as DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span>, Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span> or Eifel
+<span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious loss event is detected, CUBIC SHOULD
 restore the original values of above mentioned variables as follows if
-the current <em>cwnd</em> is lower than <em>prior_cwnd</em>. Restoring to the original
-values ensures that CUBIC's performance is similar to what it would be
-if there were no spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
+the current <em>cwnd</em> is lower than <em>prior_cwnd</em>. Restoring to the
+original values ensures that CUBIC's performance is similar to what it
+would be if there were no spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
 <div id="section-4.9-5">
           <div class="artwork art-svg alignCenter" id="section-4.9-5.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="19.176ex" role="img" viewBox="0 -4379.3 23673.8 8256.3" width="54.985ex">
@@ -3109,9 +3114,10 @@ if there were no spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a>
             </svg><a href="#section-4.9-5.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.9-6">In rare cases, when the detection happens long after a spurious loss event
-and the current <em>cwnd</em> is already higher than the <em>prior_cwnd</em>, CUBIC SHOULD
-continue to use the current and the most recent values of these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
+<p id="section-4.9-6">In rare cases, when the detection happens long after a spurious loss
+event and the current <em>cwnd</em> is already higher than the <em>prior_cwnd</em>,
+CUBIC SHOULD continue to use the current and the most recent values of
+these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="slow-start">
@@ -3119,18 +3125,19 @@ continue to use the current and the most recent values of these variables.<a hre
         <h3 id="name-slow-start">
 <a href="#section-4.10" class="section-number selfRef">4.10. </a><a href="#name-slow-start" class="section-name selfRef">Slow Start</a>
         </h3>
-<p id="section-4.10-1">CUBIC MUST employ a slow-start algorithm, when <em>cwnd</em> is no more
-than <em>ssthresh</em>. Among the slow-start algorithms, CUBIC MAY choose the
-standard TCP slow start <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in general networks, or the limited
-slow start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span> or hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span> for fast and long-
-distance networks.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
-<p id="section-4.10-2">In the case when CUBIC runs the hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, it may exit
-the first slow start without incurring any packet loss and thus <em>W</em><sub>max</sub>
-is undefined. In this special case, CUBIC switches to congestion
-avoidance and increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>, where
-t is the elapsed time since the beginning of the current congestion
-avoidance, <em>K</em> is set to 0, and <em>W</em><sub>max</sub> is set to the congestion window
-size at the beginning of the current congestion avoidance.<a href="#section-4.10-2" class="pilcrow">¶</a></p>
+<p id="section-4.10-1">CUBIC MUST employ a slow-start algorithm, when <em>cwnd</em> is no more than
+<em>ssthresh</em>. Among the slow-start algorithms, CUBIC MAY choose the
+standard TCP slow start <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in general networks, or the
+limited slow start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span> or hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span> for fast
+and long- distance networks.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
+<p id="section-4.10-2">In the case when CUBIC runs the hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, it may
+exit the first slow start without incurring any packet loss and thus
+<em>W</em><sub>max</sub> is undefined. In this special case, CUBIC switches
+to congestion avoidance and increases its congestion window size using
+<a href="#eq1" class="xref">Figure 1</a>, where t is the elapsed time since the beginning of the
+current congestion avoidance, <em>K</em> is set to 0, and <em>W</em><sub>max</sub>
+is set to the congestion window size at the beginning of the current
+congestion avoidance.<a href="#section-4.10-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3145,8 +3152,8 @@ following the guidelines specified in <span>[<a href="#RFC5033" class="xref">RFC
 <p id="section-5-2">With a deterministic loss model where the number of packets between
 two successive packet losses is always <em>1/p</em>, CUBIC always operates
 with the concave window profile, which greatly simplifies the
-performance analysis of CUBIC. The average window size of CUBIC can
-be obtained by the following function:<a href="#section-5-2" class="pilcrow">¶</a></p>
+performance analysis of CUBIC. The average window size of CUBIC can be
+obtained by the following function:<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="eq5">
 <figure id="figure-5">
         <div id="section-5-3.1">
@@ -3275,7 +3282,8 @@ be obtained by the following function:<a href="#section-5-2" class="pilcrow">¶<
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a></figcaption></figure>
 </div>
-<p id="section-5-4">With <em></em><span class="contact-name">β</span><sub>cubic</sub> set to 0.7, the above formula is reduced to:<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-4">With <em></em><span class="contact-name">β</span><sub>cubic</sub> set to 0.7, the above formula is
+reduced to:<a href="#section-5-4" class="pilcrow">¶</a></p>
 <div id="eq6">
 <figure id="figure-6">
         <div id="section-5-5.1">
@@ -3398,10 +3406,10 @@ state.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-5.1-4">CUBIC is designed to behave very similarly to Standard TCP in the
-above two types of networks. The following two tables show the
-average window sizes of Standard TCP, HSTCP, and CUBIC. The average
-window sizes of Standard TCP and HSTCP are from <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. The
-average window size of CUBIC is calculated using <a href="#eq6" class="xref">Figure 6</a> and the CUBIC
+above two types of networks. The following two tables show the average
+window sizes of Standard TCP, HSTCP, and CUBIC. The average window
+sizes of Standard TCP and HSTCP are from <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. The average
+window size of CUBIC is calculated using <a href="#eq6" class="xref">Figure 6</a> and the CUBIC
 TCP-friendly region for three different values of <em>C</em>.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <span id="name-standard-tcp-hstcp-and-cubi"></span><div id="tab1">
 <table class="center" id="table-1">
@@ -3559,23 +3567,23 @@ in MSS-sized segments.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
         </table>
 </div>
 <p id="section-5.1-8"><a href="#tab2" class="xref">Table 2</a> describes the response function of Standard TCP, HSTCP, and
-CUBIC in networks with RTT = 0.01 seconds. The average window size
-is in MSS-sized segments.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
+CUBIC in networks with RTT = 0.01 seconds. The average window size is
+in MSS-sized segments.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
 <p id="section-5.1-9">Both tables show that CUBIC with any of these three <em>C</em> values is more
 friendly to TCP than HSTCP, especially in networks with a short RTT
-where TCP performs reasonably well. For example, in a network with
-RTT = 0.01 seconds and p=10^-6, TCP has an average window of 1200
-packets. If the packet size is 1500 bytes, then TCP can achieve an
-average rate of 1.44 Gbps. In this case, CUBIC with <em>C</em>=0.04 or <em>C</em>=0.4
-achieves exactly the same rate as Standard TCP, whereas HSTCP is
-about ten times more aggressive than Standard TCP.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
-<p id="section-5.1-10">We can see that <em>C</em> determines the aggressiveness of CUBIC in competing
-with other congestion control algorithms for bandwidth. CUBIC is
-more friendly to Standard TCP, if the value of <em>C</em> is lower. However,
-we do not recommend setting <em>C</em> to a very low value like 0.04, since
-CUBIC with a low <em>C</em> cannot efficiently use the bandwidth in long RTT
-and high-bandwidth networks. Based on these observations and our
-experiments, we find <em>C</em>=0.4 gives a good balance between TCP-
+where TCP performs reasonably well. For example, in a network with RTT
+= 0.01 seconds and p=10^-6, TCP has an average window of 1200 packets.
+If the packet size is 1500 bytes, then TCP can achieve an average rate
+of 1.44 Gbps. In this case, CUBIC with <em>C</em>=0.04 or <em>C</em>=0.4 achieves
+exactly the same rate as Standard TCP, whereas HSTCP is about ten
+times more aggressive than Standard TCP.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<p id="section-5.1-10">We can see that <em>C</em> determines the aggressiveness of CUBIC in
+competing with other congestion control algorithms for bandwidth.
+CUBIC is more friendly to Standard TCP, if the value of <em>C</em> is lower.
+However, we do not recommend setting <em>C</em> to a very low value like
+0.04, since CUBIC with a low <em>C</em> cannot efficiently use the bandwidth
+in long RTT and high-bandwidth networks. Based on these observations
+and our experiments, we find <em>C</em>=0.4 gives a good balance between TCP-
 friendliness and aggressiveness of window increase. Therefore, <em>C</em>
 SHOULD be set to 0.4. With <em>C</em> set to 0.4, <a href="#eq6" class="xref">Figure 6</a> is reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <div id="eq7">
@@ -3762,9 +3770,9 @@ algorithm. Because CUBIC is designed to be more aggressive (due to a
 faster window increase function and bigger multiplicative decrease
 factor) than Standard TCP in fast and long-distance networks, it can
 fill large drop-tail buffers more quickly than Standard TCP and
-increase the risk of a standing queue <span>[<a href="#RFC8511" class="xref">RFC8511</a>]</span>. In this case, proper
-queue sizing and management <span>[<a href="#RFC7567" class="xref">RFC7567</a>]</span> could be used to reduce the
-packet queuing delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+increase the risk of a standing queue <span>[<a href="#RFC8511" class="xref">RFC8511</a>]</span>. In this case,
+proper queue sizing and management <span>[<a href="#RFC7567" class="xref">RFC7567</a>]</span> could be used to
+reduce the packet queuing delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="protection-against-congestion-collapse">
@@ -3774,8 +3782,8 @@ packet queuing delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-5.5-1">With regard to the potential of causing congestion collapse, CUBIC
 behaves like Standard TCP since CUBIC modifies only the window
-adjustment algorithm of TCP. Thus, it does not modify the ACK
-clocking and Timeout behaviors of Standard TCP.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+adjustment algorithm of TCP. Thus, it does not modify the ACK clocking
+and Timeout behaviors of Standard TCP.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fairness-within-the-alternative-congestion-control-algorithm">
@@ -3804,11 +3812,11 @@ independent of the level of statistical multiplexing in the link.<a href="#secti
 <a href="#section-5.8" class="section-number selfRef">5.8. </a><a href="#name-behavior-for-application-li" class="section-name selfRef">Behavior for Application-Limited Flows</a>
         </h3>
 <p id="section-5.8-1">CUBIC does not raise its congestion window size if the flow is
-currently limited by the application instead of the congestion
-window. In case of long periods when <em>cwnd</em> has not been updated due
-to the application rate limit, such as idle periods, t in <a href="#eq1" class="xref">Figure 1</a> MUST
-NOT include these periods; otherwise, W<sub>cubic</sub>(t) might be very high
-after restarting from these periods.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
+currently limited by the application instead of the congestion window.
+In case of long periods when <em>cwnd</em> has not been updated due to the
+application rate limit, such as idle periods, t in <a href="#eq1" class="xref">Figure 1</a> MUST NOT
+include these periods; otherwise, W<sub>cubic</sub>(t) might be very
+high after restarting from these periods.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="responses-to-sudden-or-transient-events">
@@ -3826,10 +3834,10 @@ event, CUBIC behaves the same as Standard TCP.<a href="#section-5.9-1" class="pi
 <a href="#section-5.10" class="section-number selfRef">5.10. </a><a href="#name-incremental-deployment" class="section-name selfRef">Incremental Deployment</a>
         </h3>
 <p id="section-5.10-1">CUBIC requires only the change of TCP senders, and it does not make
-any changes to TCP receivers. That is, a CUBIC sender works
-correctly with the Standard TCP receivers. In addition, CUBIC does
-not require any changes to the routers and does not require any
-assistance from the routers.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
+any changes to TCP receivers. That is, a CUBIC sender works correctly
+with the Standard TCP receivers. In addition, CUBIC does not require
+any changes to the routers and does not require any assistance from
+the routers.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3839,9 +3847,8 @@ assistance from the routers.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
       <h2 id="name-security-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-6-1">This proposal makes no changes to the underlying security of TCP.
-More information about TCP security concerns can be found in
-<span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">This proposal makes no changes to the underlying security of TCP. More
+information about TCP security concerns can be found in <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -3926,7 +3933,7 @@ More information about TCP security concerns can be found in
 <dd class="break"></dd>
 <dt id="HR08">[HR08]</dt>
         <dd>
-<span class="refAuthor">Ha, S.</span><span class="refAuthor"> and I. Rhee</span>, <span class="refTitle">"Hybrid Slow Start for High-Bandwidth and Long-Distance Networks"</span>, <span class="seriesInfo">International Workshop on Protocols for Fast Long-Distance Networks</span>, <time datetime="2008" class="refDate">2008</time>, <span>&lt;<a href="https://pdfs.semanticscholar.org/25e9/ef3f03315782c7f1cbcd31b587857adae7d1.pdf">https://pdfs.semanticscholar.org/25e9/ef3f03315782c7f1cbcd31b587857adae7d1.pdf</a>&gt;</span>. </dd>
+<span class="refAuthor">Ha, S.</span><span class="refAuthor"> and I. Rhee</span>, <span class="refTitle">"Hybrid Slow Start for High-Bandwidth and Long-Distance Networks"</span>, <span class="seriesInfo">International Workshop on Protocols for Fast Long-Distance Networks</span>, <time datetime="2008-03" class="refDate">March 2008</time>, <span>&lt;<a href="http://www.hep.man.ac.uk/g/GDARN-IT/pfldnet2008/paper/Sangate_Ha%20Final.pdf">http://www.hep.man.ac.uk/g/GDARN-IT/pfldnet2008/paper/Sangate_Ha%20Final.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="HRX08">[HRX08]</dt>
         <dd>
@@ -3970,7 +3977,7 @@ More information about TCP security concerns can be found in
 <dd class="break"></dd>
 <dt id="SXEZ19">[SXEZ19]</dt>
         <dd>
-<span class="refAuthor">Sun, W.</span><span class="refAuthor">, Xu, L.</span><span class="refAuthor">, Elbaum, S.</span><span class="refAuthor">, and D. Zhao</span>, <span class="refTitle">"Model-Agnostic and Efficient Exploration of Numerical State Space of Real-World TCP Congestion Control Implementations"</span>, <span class="seriesInfo">USENIX NSDI 2019</span>, <time datetime="2019" class="refDate">2019</time>. </dd>
+<span class="refAuthor">Sun, W.</span><span class="refAuthor">, Xu, L.</span><span class="refAuthor">, Elbaum, S.</span><span class="refAuthor">, and D. Zhao</span>, <span class="refTitle">"Model-Agnostic and Efficient Exploration of Numerical State Space of Real-World TCP Congestion Control Implementations"</span>, <span class="seriesInfo">USENIX NSDI 2019</span>, <time datetime="2019-02" class="refDate">February 2019</time>, <span>&lt;<a href="https://www.usenix.org/system/files/nsdi19-sun.pdf">https://www.usenix.org/system/files/nsdi19-sun.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="XHR04">[XHR04]</dt>
       <dd>
@@ -3988,10 +3995,10 @@ More information about TCP security concerns can be found in
 <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#section-appendix.a-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="changes-from-rfc8312">
+<div id="evolution-of-cubic">
 <section id="section-appendix.b">
-      <h2 id="name-changes-from-rfc8312">
-<a href="#section-appendix.b" class="section-number selfRef">Appendix B. </a><a href="#name-changes-from-rfc8312" class="section-name selfRef">Changes from RFC8312</a>
+      <h2 id="name-evolution-of-cubic">
+<a href="#section-appendix.b" class="section-number selfRef">Appendix B. </a><a href="#name-evolution-of-cubic" class="section-name selfRef">Evolution of CUBIC</a>
       </h2>
 <div id="since-draft-eggert-tcpm-rfc8312bis-00">
 <section id="section-b.1">
@@ -4009,27 +4016,30 @@ More information about TCP security concerns can be found in
 (<a href="https://github.com/NTAP/rfc8312bis/issues/5">#5</a>,
 <a href="https://github.com/NTAP/rfc8312bis/issues/5">#6</a>)<a href="#section-b.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.1-1.4">update <em>K</em>'s definition and add bounds for CUBIC <em>target</em> <em>cwnd</em> <span>[<a href="#SXEZ19" class="xref">SXEZ19</a>]</span>
-(<a href="https://github.com/NTAP/rfc8312bis/issues/1">#1</a>,
+          <li class="normal" id="section-b.1-1.4">update <em>K</em>'s definition and add bounds for CUBIC <em>target</em> <em>cwnd</em>
+            <span>[<a href="#SXEZ19" class="xref">SXEZ19</a>]</span> (<a href="https://github.com/NTAP/rfc8312bis/issues/1">#1</a>,
 <a href="https://github.com/NTAP/rfc8312bis/issues/14">#14</a>)<a href="#section-b.1-1.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-b.1-1.5">update <em>W</em><sub>est</sub> to use AIMD approach
 (<a href="https://github.com/NTAP/rfc8312bis/issues/20">#20</a>)<a href="#section-b.1-1.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.1-1.6">set alpha<sub>aimd</sub>
-to 1 once <em>W</em><sub>est</sub> reaches <em>W</em><sub>max</sub>
+          <li class="normal" id="section-b.1-1.6">set alpha<sub>aimd</sub> to 1 once <em>W</em><sub>est</sub>
+reaches <em>W</em><sub>max</sub>
 (<a href="https://github.com/NTAP/rfc8312bis/issues/2">#2</a>)<a href="#section-b.1-1.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.1-1.7">add Vidhi as co-author (<a href="https://github.com/NTAP/rfc8312bis/issues/17">#17</a>)<a href="#section-b.1-1.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-b.1-1.7">add Vidhi as co-author<a href="#section-b.1-1.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.1-1.8">note for fast recovery during <em>cwnd</em> decrease due to congestion event
-(<a href="https://github.com/NTAP/rfc8312bis11/issues/11">#11</a>)<a href="#section-b.1-1.8" class="pilcrow">¶</a>
+          <li class="normal" id="section-b.1-1.8">(<a href="https://github.com/NTAP/rfc8312bis/issues/17">#17</a>)<a href="#section-b.1-1.8" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.1-1.9">add section for Spurious Loss events
-(<a href="https://github.com/NTAP/rfc8312bis/issues/23">#23</a>)<a href="#section-b.1-1.9" class="pilcrow">¶</a>
+          <li class="normal" id="section-b.1-1.9">note for fast recovery during <em>cwnd</em> decrease due to congestion
+event (<a href="https://github.com/NTAP/rfc8312bis11/issues/11">#11</a>)<a href="#section-b.1-1.9" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.1-1.10">initialize <em>W</em><sub>est</sub> after timeout and remove variable
-W<sub>last_max</sub> (<a href="https://github.com/NTAP/rfc8312bis/issues/28">#28</a>)<a href="#section-b.1-1.10" class="pilcrow">¶</a>
+          <li class="normal" id="section-b.1-1.10">add section for Spurious Loss events
+(<a href="https://github.com/NTAP/rfc8312bis/issues/23">#23</a>)<a href="#section-b.1-1.10" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-b.1-1.11">initialize <em>W</em><sub>est</sub> after timeout and remove variable
+<em>W</em><sub>last_max</sub>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/28">#28</a>)<a href="#section-b.1-1.11" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -4040,52 +4050,60 @@ W<sub>last_max</sub> (<a href="https://github.com/NTAP/rfc8312bis/issues/28">#28
 <a href="#section-b.2" class="section-number selfRef">B.2. </a><a href="#name-since-rfc8312" class="section-name selfRef">Since RFC8312</a>
         </h2>
 <ul class="normal">
-<li class="normal" id="section-b.2-1.1">converted to markdown and xml2rfc v3<a href="#section-b.2-1.1" class="pilcrow">¶</a>
+<li class="normal" id="section-b.2-1.1">converted to Markdown and xml2rfc v3<a href="#section-b.2-1.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-b.2-1.2">updated references (as part of the conversion)<a href="#section-b.2-1.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-b.2-1.3">updated author information<a href="#section-b.2-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-b.2-1.4">various whitespace changes<a href="#section-b.2-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-b.2-1.4">various formatting changes<a href="#section-b.2-1.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-b.2-1.5">move to Standards Track<a href="#section-b.2-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
+<div id="since-the-original-paper">
+<section id="section-b.3">
+        <h2 id="name-since-the-original-paper">
+<a href="#section-b.3" class="section-number selfRef">B.3. </a><a href="#name-since-the-original-paper" class="section-name selfRef">Since the Original Paper</a>
+        </h2>
+<p id="section-b.3-1">CUBIC has gone through a few changes since the initial release
+<span>[<a href="#HRX08" class="xref">HRX08</a>]</span> of its algorithm and implementation. Below we highlight the
+differences between its original paper and <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#section-b.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-b.3-2.1">The original paper <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> includes the pseudocode of CUBIC
+implementation using Linux's pluggable congestion control framework,
+which excludes system-specific optimizations. The simplified
+pseudocode might be a good source to start with and understand CUBIC.<a href="#section-b.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-b.3-2.2">
+            <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> also includes experimental results showing its performance
+{{and fairness.<a href="#section-b.3-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-b.3-2.3">The definition of <em>beta</em><sub>cubic</sub> constant
+was changed in <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>. For example,
+<em>beta</em><sub>cubic</sub> in the original paper was the
+window decrease constant while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> changed it to CUBIC
+multiplication decrease factor. With this change, the current
+congestion window size after a loss event in <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> was
+<em>beta</em><sub>cubic</sub> <em>W</em><sub>max</sub> while it was
+(1-<em>beta</em><sub>cubic</sub>) * <em>W</em><sub>max</sub> in the
+original paper.<a href="#section-b.3-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-b.3-2.4">Its pseudocode used <em>W</em><sub>last_max</sub> while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used
+<em>W</em><sub>max</sub>.<a href="#section-b.3-2.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-b.3-2.5">Its TCP friendly window was W<sub>tcp</sub> while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used
+<em>W</em><sub>est</sub>.<a href="#section-b.3-2.5" class="pilcrow">¶</a>
+</li>
+        </ul>
 </section>
 </div>
-<div id="changes-from-the-original-paper">
-<section id="section-appendix.c">
-      <h2 id="name-changes-from-the-original-p">
-<a href="#section-appendix.c" class="section-number selfRef">Appendix C. </a><a href="#name-changes-from-the-original-p" class="section-name selfRef">Changes from the Original Paper</a>
-      </h2>
-<p id="section-appendix.c-1">CUBIC has gone through a few changes since the initial release <span>[<a href="#HRX08" class="xref">HRX08</a>]</span>
-of its algorithm and implementation. Below we highlight the differences
-between its original paper and <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#section-appendix.c-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-appendix.c-2.1">The original paper <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> included the pseudocode of CUBIC implementation
-using Linux's pluggable congestion control framework, which excludes system-specific
-optimizations. The simplified pseudocode might be a good source to start with
-and understand CUBIC.<a href="#section-appendix.c-2.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-appendix.c-2.2">It also includes experimental results showing its performance and fairness.<a href="#section-appendix.c-2.2" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-appendix.c-2.3">The definition of beta_cubic constant was changed in <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.
-For example, beta_cubic in the original paper was the window decrease constant
-while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> changed it to CUBIC multiplication decrease factor.
-With this change, the current congestion window size after a loss event in <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>
-was beta_cubic * W_max while it was (1-beta_cubic) * W_max in the original paper.<a href="#section-appendix.c-2.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-appendix.c-2.4">Its pseudocode used W_last_max while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used W_max.<a href="#section-appendix.c-2.4" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-appendix.c-2.5">Its TCP friendly window was W_tcp while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used W_est.<a href="#section-appendix.c-2.5" class="pilcrow">¶</a>
-</li>
-      </ul>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="section-appendix.d">
+<section id="section-appendix.c">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
