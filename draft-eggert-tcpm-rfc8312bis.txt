@@ -191,22 +191,22 @@ Table of Contents
    reduction in response to a congestion event is detected by duplicate
    ACKs or Explicit Congestion Notification-Echo (ECN-Echo) ACKs
    [RFC3168], CUBIC registers the congestion window size where it got
-   the congestion event as _W__(max) and performs a multiplicative
+   the congestion event as _W_(max)_ and performs a multiplicative
    decrease of congestion window.  After it enters into congestion
    avoidance, it starts to increase the congestion window using the
    concave profile of the cubic function.  The cubic function is set to
-   have its plateau at _W__(max) so that the concave window increase
-   continues until the window size becomes _W__(max).  After that, the
+   have its plateau at _W_(max)_ so that the concave window increase
+   continues until the window size becomes _W_(max)_. After that, the
    cubic function turns into a convex profile and the convex window
    increase begins.  This style of window adjustment (concave and then
    convex) improves the algorithm stability while maintaining high
    network utilization [CEHRX07].  This is because the window size
-   remains almost constant, forming a plateau around _W__(max) where
+   remains almost constant, forming a plateau around _W_(max)_ where
    network utilization is deemed highest.  Under steady state, most
-   window size samples of CUBIC are close to _W__(max), thus promoting
+   window size samples of CUBIC are close to _W_(max)_, thus promoting
    high network utilization and stability.  Note that those congestion
    control algorithms using only convex functions to increase the
-   congestion window size have the maximum increments around _W__(max),
+   congestion window size have the maximum increments around _W_(max)_,
    and thus introduce a large number of packet bursts around the
    saturation point of the network, likely causing frequent global loss
    synchronizations.
@@ -281,7 +281,7 @@ Table of Contents
 
 4.1.1.  Constants of interest
 
-   β___(cubic): CUBIC multiplication decrease factor as described in
+   β__(cubic)_: CUBIC multiplication decrease factor as described in
    Section 4.6.
 
    _C_: constant that determines the aggressiveness of CUBIC in
@@ -305,11 +305,11 @@ Table of Contents
 
    _ssthresh_: Current slow start threshold in segments.
 
-   _W__(max): Size of _cwnd_ in segments just before _cwnd_ is reduced
+   _W_(max)_: Size of _cwnd_ in segments just before _cwnd_ is reduced
    in the last congestion event.
 
    _K_: The time period in seconds it takes to increase the current
-   congestion window size to _W__(max).
+   congestion window size to _W_(max)_.
 
    _current_time_: Current time of the system in seconds.
 
@@ -324,7 +324,7 @@ Table of Contents
    next _RTT_, that is, W_(cubic)(_t_ + _RTT_) as described in
    Section 4.2.
 
-   _W__(est): An estimate for the congestion window in segments in the
+   _W_(est)_: An estimate for the congestion window in segments in the
    TCP-friendly region, that is, an estimate for the congestion window
    using the AIMD approach similar to TCP-NewReno congestion controller.
 
@@ -341,9 +341,9 @@ Table of Contents
 
    CUBIC uses the following window increase function:
 
-                                                3
-                   W     ( * t * ) = C * (t - K)  + W
-                    cubic                            max
+                                             3
+                      W     (t) = C * (t - K)  + W
+                       cubic                      max
 
                                   Figure 1
 
@@ -354,7 +354,7 @@ Table of Contents
 
    where _epoch_start_ is the time at which the current congestion
    avoidance stage starts. _K_ is the time period that the above
-   function takes to increase the current window size to _W__(max) if
+   function takes to increase the current window size to _W_(max)_ if
    there are no further congestion events and is calculated using the
    following equation:
 
@@ -371,7 +371,7 @@ Table of Contents
    Section 4.6 when a congestion event is detected, although
    implementations can further adjust _cwnd_ based on other fast
    recovery mechanisms.  In special cases, if _cwnd_ is greater than
-   _W__(max), _K_ is set to 0.
+   _W_(max)_, _K_ is set to 0.
 
    Upon receiving an ACK during congestion avoidance, CUBIC computes the
    _target_ congestion window size after the next _RTT_ using Figure 1
@@ -401,10 +401,10 @@ Table of Contents
        least the same throughput as Standard TCP.
 
    2.  The concave region, if CUBIC is not in the TCP-friendly region
-       and _cwnd_ is less than _W__(max).
+       and _cwnd_ is less than _W_(max)_.
 
    3.  The convex region, if CUBIC is not in the TCP-friendly region and
-       _cwnd_ is greater than _W__(max).
+       _cwnd_ is greater than _W_(max)_.
 
    Below, we describe the exact actions taken by CUBIC in each region.
 
@@ -418,11 +418,11 @@ Table of Contents
    The TCP-friendly region is designed according to the analysis
    described in [FHP00].  The analysis studies the performance of an
    Additive Increase and Multiplicative Decrease (AIMD) algorithm with
-   an additive factor of α___(aimd) (segments per _RTT_) and a
-   multiplicative factor of β___(aimd), denoted by AIMD(α___(aimd),
-   β___(aimd)).  Specifically, the average congestion window size of
-   AIMD(α___(aimd), β___(aimd)) can be calculated using Figure 3.  The
-   analysis shows that AIMD(α___(aimd), β___(aimd)) with
+   an additive factor of α__(aimd)_ (segments per _RTT_) and a
+   multiplicative factor of β__(aimd)_, denoted by AIMD(α__(aimd)_,
+   β__(aimd)_).  Specifically, the average congestion window size of
+   AIMD(α__(aimd)_, β__(aimd)_) can be calculated using Figure 3.  The
+   analysis shows that AIMD(α__(aimd)_, β__(aimd)_) with
 
                                       1 - β
                                            cubic
@@ -443,7 +443,7 @@ Table of Contents
                                   Figure 3
 
    Based on the above analysis, CUBIC uses Figure 4 to estimate the
-   window size _W__(est) of AIMD(α___(aimd), β___(aimd)) with
+   window size _W_(est)_ of AIMD(α__(aimd)_, β__(aimd)_) with
 
                                       1 - β
                                            cubic
@@ -456,12 +456,12 @@ Table of Contents
 
    which achieves the same average window size as Standard TCP.  When
    receiving an ACK in congestion avoidance (_cwnd_ could be greater
-   than or less than _W__(max)), CUBIC checks whether W_(cubic)(_t_) is
-   less than _W__(est).  If so, CUBIC is in the TCP-friendly region and
-   _cwnd_ SHOULD be set to _W__(est) at each reception of an ACK.
+   than or less than _W_(max)_), CUBIC checks whether W_(cubic)(_t_) is
+   less than _W_(est)_. If so, CUBIC is in the TCP-friendly region and
+   _cwnd_ SHOULD be set to _W_(est)_ at each reception of an ACK.
 
-   _W__(est) is set equal to _cwnd_ at the start of the congestion
-   avoidance stage.  After that, on every ACK, _W__(est) is updated
+   _W_(est)_ is set equal to _cwnd_ at the start of the congestion
+   avoidance stage.  After that, on every ACK, _W_(est)_ is updated
    using Figure 4.
 
                                          segments_acked
@@ -470,14 +470,14 @@ Table of Contents
 
                                   Figure 4
 
-   Note that once _W__(est) reaches _W__(max), that is, _W__(est) >=
-   _W__(max), α___(aimd) SHOULD be set to 1 to achieve the same
+   Note that once _W_(est)_ reaches _W_(max)_, that is, _W_(est)_ >=
+   _W_(max)_, α__(aimd)_ SHOULD be set to 1 to achieve the same
    congestion window size as standard TCP that uses AIMD.
 
 4.4.  Concave Region
 
    When receiving an ACK in congestion avoidance, if CUBIC is not in the
-   TCP-friendly region and _cwnd_ is less than _W__(max), then CUBIC is
+   TCP-friendly region and _cwnd_ is less than _W_(max)_, then CUBIC is
    in the concave region.  In this region, _cwnd_ MUST be incremented by
 
                                target - cwnd
@@ -490,7 +490,7 @@ Table of Contents
 4.5.  Convex Region
 
    When receiving an ACK in congestion avoidance, if CUBIC is not in the
-   TCP-friendly region and _cwnd_ is larger than or equal to _W__(max),
+   TCP-friendly region and _cwnd_ is larger than or equal to _W_(max)_,
    then CUBIC is in the convex region.  The convex region indicates that
    the network conditions might have been perturbed since the last
    congestion event, possibly implying more available bandwidth after
@@ -501,7 +501,7 @@ Table of Contents
    profile ensures that the window increases very slowly at the
    beginning and gradually increases its increase rate.  We also call
    this region the "maximum probing phase" since CUBIC is searching for
-   a new _W__(max).  In this region, _cwnd_ MUST be incremented by
+   a new _W_(max)_. In this region, _cwnd_ MUST be incremented by
 
                                target - cwnd
                                -------------
@@ -514,11 +514,11 @@ Table of Contents
 
    When a packet loss is detected by duplicate ACKs or a network
    congestion is detected by receiving packets marked with ECN-Echo
-   (ECE), CUBIC updates its _W__(max) and reduces its _cwnd_ and
+   (ECE), CUBIC updates its _W_(max)_ and reduces its _cwnd_ and
    _ssthresh_ immediately as below.  For both packet loss and congestion
    detection through ECN, the sender MAY employ a fast recovery
    algorithm to gradually adjust the congestion window to its new
-   reduced value.  Parameter β___(cubic) SHOULD be set to 0.7.
+   reduced value.  Parameter β__(cubic)_ SHOULD be set to 0.7.
 
         ssthresh = cwnd * β         // new slow-start threshold
                            cubic
@@ -529,11 +529,11 @@ Table of Contents
                                     // window reduction
         cwnd = ssthresh
 
-   A side effect of setting β___(cubic) to a value bigger than 0.5 is
+   A side effect of setting β__(cubic)_ to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
-   β___(cubic) could result in faster convergence, it will make the
+   β__(cubic)_ could result in faster convergence, it will make the
    analysis of CUBIC much harder.  This adaptive adjustment of
-   β___(cubic) is an item for the next version of CUBIC.
+   β__(cubic)_ is an item for the next version of CUBIC.
 
 4.7.  Fast Convergence
 
@@ -546,7 +546,7 @@ Table of Contents
    SHOULD be implemented.
 
    With fast convergence, when a congestion event occurs, we update
-   _W__(max) as follows before the window reduction as described in
+   _W_(max)_ as follows before the window reduction as described in
    Section 4.5.
 
            /       1 + β
@@ -557,12 +557,12 @@ Table of Contents
            |                  otherwise, remember cwnd before reduction
            \cwnd
 
-   At a congestion event, if the current _cwnd_ is less than _W__(max),
+   At a congestion event, if the current _cwnd_ is less than _W_(max)_,
    this indicates that the saturation point experienced by this flow is
    getting reduced because of the change in available bandwidth.  Then
-   we allow this flow to release more bandwidth by reducing _W__(max)
+   we allow this flow to release more bandwidth by reducing _W_(max)_
    further.  This action effectively lengthens the time for this flow to
-   increase its congestion window because the reduced _W__(max) forces
+   increase its congestion window because the reduced _W_(max)_ forces
    the flow to have the plateau earlier.  This allows more time for the
    new flow to catch up to its congestion window size.
 
@@ -574,15 +574,15 @@ Table of Contents
 4.8.  Timeout
 
    In case of timeout, CUBIC follows Standard TCP to reduce _cwnd_
-   [RFC5681], but sets _ssthresh_ using β___(cubic) (same as in
+   [RFC5681], but sets _ssthresh_ using β__(cubic)_ (same as in
    Section 4.6) that is different from Standard TCP [RFC5681].
 
    During the first congestion avoidance after a timeout, CUBIC
    increases its congestion window size using Figure 1, where t is the
    elapsed time since the beginning of the current congestion avoidance,
-   _K_ is set to 0, and _W__(max) is set to the congestion window size
+   _K_ is set to 0, and _W_(max)_ is set to the congestion window size
    at the beginning of the current congestion avoidance.  In addition,
-   for the tcp-friendliness region, _W__(est) should be set to the
+   for the tcp-friendliness region, _W_(est)_ should be set to the
    congestion window size at the beginning of the current congestion
    avoidance.
 
@@ -653,10 +653,10 @@ Table of Contents
 
    In the case when CUBIC runs the hybrid slow start [HR08], it may exit
    the first slow start without incurring any packet loss and thus
-   _W__(max) is undefined.  In this special case, CUBIC switches to
+   _W_(max)_ is undefined.  In this special case, CUBIC switches to
    congestion avoidance and increases its congestion window size using
    Figure 1, where t is the elapsed time since the beginning of the
-   current congestion avoidance, _K_ is set to 0, and _W__(max) is set
+   current congestion avoidance, _K_ is set to 0, and _W_(max)_ is set
    to the congestion window size at the beginning of the current
    congestion avoidance.
 
@@ -681,7 +681,7 @@ Table of Contents
 
                                   Figure 5
 
-   With β___(cubic) set to 0.7, the above formula is reduced to:
+   With β__(cubic)_ set to 0.7, the above formula is reduced to:
 
                                                   ____
                                      _______   3 /   4
@@ -1073,10 +1073,10 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
       [SXEZ19] (#1 (https://github.com/NTAP/rfc8312bis/issues/1), #14
       (https://github.com/NTAP/rfc8312bis/issues/14))
 
-   *  update _W__(est) to use AIMD approach (#20
+   *  update _W_(est)_ to use AIMD approach (#20
       (https://github.com/NTAP/rfc8312bis/issues/20))
 
-   *  set alpha___(aimd) to 1 once _W__(est) reaches _W__(max) (#2
+   *  set alpha__(aimd)_ to 1 once _W_(est)_ reaches _W_(max)_ (#2
       (https://github.com/NTAP/rfc8312bis/issues/2))
 
    *  add Vidhi as co-author
@@ -1089,8 +1089,8 @@ B.1.  Since draft-eggert-tcpm-rfc8312bis-00
    *  add section for Spurious Loss events (#23
       (https://github.com/NTAP/rfc8312bis/issues/23))
 
-   *  initialize _W__(est) after timeout and remove variable
-      _W__(last_max) (#28 (https://github.com/NTAP/rfc8312bis/
+   *  initialize _W_(est)_ after timeout and remove variable
+      _W_(last_max)_ (#28 (https://github.com/NTAP/rfc8312bis/
       issues/28))
 
 B.2.  Since RFC8312
@@ -1120,18 +1120,18 @@ B.3.  Since the Original Paper
    *  [HRX08] also includes experimental results showing its performance
       {{and fairness.
 
-   *  The definition of beta___(cubic) constant was changed in
-      [RFC8312].  For example, beta___(cubic) in the original paper was
+   *  The definition of beta__(cubic)_ constant was changed in
+      [RFC8312].  For example, beta__(cubic)_ in the original paper was
       the window decrease constant while [RFC8312] changed it to CUBIC
       multiplication decrease factor.  With this change, the current
       congestion window size after a loss event in [RFC8312] was
-      beta___(cubic) * _W__(max) while it was (1-beta___(cubic)) *
-      _W__(max) in the original paper.
+      beta__(cubic)_ * _W_(max)_ while it was (1-beta__(cubic)_) *
+      _W_(max)_ in the original paper.
 
-   *  Its pseudocode used _W__(last_max) while [RFC8312] used _W__(max).
+   *  Its pseudocode used _W_(last_max)_ while [RFC8312] used _W_(max)_.
 
    *  Its TCP friendly window was W_(tcp) while [RFC8312] used
-      _W__(est).
+      _W_(est)_.
 
 Authors' Addresses
 
