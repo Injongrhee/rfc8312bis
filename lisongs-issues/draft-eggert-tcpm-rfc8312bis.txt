@@ -80,8 +80,8 @@ Table of Contents
    3.  Design Principles of CUBIC
    4.  CUBIC Congestion Control
      4.1.  Definitions
-       4.1.1.  Constants of interest
-       4.1.2.  Variables of interest
+       4.1.1.  Constants of Interest
+       4.1.2.  Variables of Interest
      4.2.  Window Increase Function
      4.3.  TCP-Friendly Region
      4.4.  Concave Region
@@ -279,7 +279,7 @@ Table of Contents
    The unit of all window sizes in this document is segments of the
    maximum segment size (MSS), and the unit of all times is seconds.
 
-4.1.1.  Constants of interest
+4.1.1.  Constants of Interest
 
    β__(cubic)_: CUBIC multiplication decrease factor as described in
    Section 4.6.
@@ -294,7 +294,7 @@ Table of Contents
                                         3
                                   second
 
-4.1.2.  Variables of interest
+4.1.2.  Variables of Interest
 
    Variables required to implement CUBIC are described in this section.
 
