@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-15T00:02:43.457818+00:00",
+  "timestamp": "2020-12-17T00:04:26.391006+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -644,7 +644,7 @@
       "id": "MDU6SXNzdWU3NDQ0MTgyNTY=",
       "title": "Highlight difference to paper",
       "url": "https://github.com/NTAP/rfc8312bis/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mirjak",
       "authorAssociation": "NONE",
       "assignees": [
@@ -655,8 +655,8 @@
       ],
       "body": "Would be nice to highlight what has changed from the original paper as that paper is still a good source to start with and understand cubic.",
       "createdAt": "2020-11-17T05:15:38Z",
-      "updatedAt": "2020-12-02T07:26:01Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-16T08:41:21Z",
+      "closedAt": "2020-12-16T08:41:21Z",
       "comments": [
         {
           "author": "sangtaeha",
@@ -2908,24 +2908,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTMyMzQ1OTkw",
       "title": "highlight the difference from the original paper and RFC8312",
       "url": "https://github.com/NTAP/rfc8312bis/pull/30",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "sangtaeha",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This includes the list of changes since the original paper. The section headings are similar to the issue logs at the end, so we may clean up at the end. Also, I didn't really install any tool to check this change (markdown and others). So please let me if this doesn't work. This fixes #10.",
       "createdAt": "2020-12-04T07:21:51Z",
-      "updatedAt": "2020-12-14T16:10:33Z",
+      "updatedAt": "2020-12-16T08:41:21Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "f2d72f728d1aff90f9f862b178bc1e5e6d94e36f",
+      "baseRefOid": "b39d20a11aa9d4081e03acb50cbd0505da62c18c",
       "headRepository": "sangtaeha/rfc8312bis",
       "headRefName": "highlight-differences",
-      "headRefOid": "458ee4082e0068de1981fd4c59d5241dca535e33",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "2a5296d686b23d05f8049398dff519ebe638189e",
+      "closedAt": "2020-12-16T08:41:21Z",
+      "mergedAt": "2020-12-16T08:41:21Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "77c7776cff150c2122a01f787903143b993fa21a"
+      },
       "comments": [
         {
           "author": "sangtaeha",
@@ -3003,6 +3005,34 @@
           "body": "@larseggert Great. Thanks!",
           "createdAt": "2020-12-04T11:38:37Z",
           "updatedAt": "2020-12-04T11:38:37Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Would this be ready for a merge after the conflicts are resolved?",
+          "createdAt": "2020-12-16T07:00:40Z",
+          "updatedAt": "2020-12-16T07:00:40Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert Yes, more likely. I rearranged them based on the feedback from you and @goelvidhi. After the merge, we can decide. The listed differences are more descriptive than the changelog, so we may either extend or shorten them.",
+          "createdAt": "2020-12-16T07:20:58Z",
+          "updatedAt": "2020-12-16T07:20:58Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "OK. I will merge once you resolve the conflicts to the `main` branch.",
+          "createdAt": "2020-12-16T07:31:03Z",
+          "updatedAt": "2020-12-16T07:31:03Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert I fixed it. Thanks!",
+          "createdAt": "2020-12-16T08:13:26Z",
+          "updatedAt": "2020-12-16T08:13:26Z"
         }
       ],
       "reviews": [
@@ -3022,37 +3052,37 @@
               "originalPosition": 12,
               "body": "Please use title capitalization (also in your other headings)",
               "createdAt": "2020-12-04T08:20:56Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             },
             {
               "originalPosition": 4,
               "body": "This DOI doesn't seem to be correct (or exist?)",
               "createdAt": "2020-12-04T08:21:35Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             },
             {
               "originalPosition": 15,
               "body": "Reference the \"initial relase\"?",
               "createdAt": "2020-12-04T08:22:01Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             },
             {
               "originalPosition": 33,
               "body": "This seems redundant with the bullet lists in the next appendix. Maybe we add a placeholder here for now, and convert the bullet list into a section when we're done with the draft?",
               "createdAt": "2020-12-04T08:23:34Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             },
             {
               "originalPosition": 39,
               "body": "```suggestion\r\npaper was the window decrease constant while {{!RFC8312}} changed it to CUBIC\r\n```",
               "createdAt": "2020-12-04T08:24:06Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             },
             {
               "originalPosition": 44,
               "body": "```suggestion\r\n- TCP friendly window is called W_est in {{!RFC8312}}, whereas it was W_tcp in\r\n```",
               "createdAt": "2020-12-04T08:24:23Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             }
           ]
         },
@@ -3072,7 +3102,7 @@
               "originalPosition": 4,
               "body": "It looks like that is ACM's internal number. Let me manually add it. Thanks!",
               "createdAt": "2020-12-04T08:32:24Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             }
           ]
         },
@@ -3092,7 +3122,7 @@
               "originalPosition": 33,
               "body": "Yes, that makes sense. ",
               "createdAt": "2020-12-04T08:34:17Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             }
           ]
         },
@@ -3138,7 +3168,7 @@
               "originalPosition": 33,
               "body": "Could you add that placeholder?",
               "createdAt": "2020-12-04T11:41:24Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             }
           ]
         },
@@ -3184,9 +3214,22 @@
               "originalPosition": 96,
               "body": "I think we should merge these two sections into the bullet lists below. Upon publication we can decide to convert the bullet lists to prose or remove them.",
               "createdAt": "2020-12-07T11:01:10Z",
-              "updatedAt": "2020-12-14T16:10:33Z"
+              "updatedAt": "2020-12-16T08:06:38Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUzNDE4OTIy",
+          "commit": {
+            "abbreviatedOid": "458ee40"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-16T07:31:34Z",
+          "updatedAt": "2020-12-16T07:31:34Z",
+          "comments": []
         }
       ]
     },
@@ -3861,24 +3904,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM0NDQ1MTYz",
       "title": "Pretty Latex math",
       "url": "https://github.com/NTAP/rfc8312bis/pull/34",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "This uses the experimental `math` support in [kramdown-rfc2629](https://github.com/cabo/kramdown-rfc2629) to render Latex-style equations via [tex2svg](https://github.com/mathjax/mathjax-node-cli) and [asciitex](https://github.com/larseggert/asciiTeX).\r\n\r\nI'm still working through some issues with the toolchain, so this isn't ready for merging yet, but I wanted to give you a preview.",
       "createdAt": "2020-12-08T13:18:18Z",
-      "updatedAt": "2020-12-14T14:46:06Z",
+      "updatedAt": "2020-12-16T07:30:04Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "bacd8983f5dff7c20284e7fb5299c970b980bf05",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "pretty-math",
-      "headRefOid": "24d64a06c4efecf97d9bbf1920a7a9578ffba82b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "c3902ba60735a10ef8e26cc2660fac1e0fcb2949",
+      "closedAt": "2020-12-16T07:30:00Z",
+      "mergedAt": "2020-12-16T07:30:00Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "b39d20a11aa9d4081e03acb50cbd0505da62c18c"
+      },
       "comments": [
         {
           "author": "goelvidhi",
@@ -3893,9 +3938,154 @@
           "body": "@goelvidhi yes, that is part of the toolchain issue. The text version is also missing some of the math, which is another.",
           "createdAt": "2020-12-09T09:33:15Z",
           "updatedAt": "2020-12-09T09:33:15Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "This is ready for review!",
+          "createdAt": "2020-12-15T09:40:12Z",
+          "updatedAt": "2020-12-15T09:40:12Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUyMjg0MjA1",
+          "commit": {
+            "abbreviatedOid": "24d64a0"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-15T09:59:31Z",
+          "updatedAt": "2020-12-15T10:06:22Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "segment/second^3 is showing up in the next line. Is that expected?",
+              "createdAt": "2020-12-15T09:59:31Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            },
+            {
+              "originalPosition": 124,
+              "body": "This shows up as Figure 1 instead of Eq. 1. Is it because of the pretty math?\r\n",
+              "createdAt": "2020-12-15T10:01:08Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            },
+            {
+              "originalPosition": 287,
+              "body": "this is also going into next line, which is likely due to the pretty math. But as it is in the middle of a sentence, it looks a bit odd.",
+              "createdAt": "2020-12-15T10:04:05Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            },
+            {
+              "originalPosition": 311,
+              "body": "same comment here.",
+              "createdAt": "2020-12-15T10:04:30Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            },
+            {
+              "originalPosition": 378,
+              "body": "this looks great. ",
+              "createdAt": "2020-12-15T10:05:41Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUyNDM2MzA3",
+          "commit": {
+            "abbreviatedOid": "24d64a0"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-15T13:15:11Z",
+          "updatedAt": "2020-12-15T13:15:12Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "Yes. The `xml2rfc` tool can't handle inline math.",
+              "createdAt": "2020-12-15T13:15:12Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUyNDM2NjE2",
+          "commit": {
+            "abbreviatedOid": "24d64a0"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-15T13:15:35Z",
+          "updatedAt": "2020-12-15T13:15:35Z",
+          "comments": [
+            {
+              "originalPosition": 124,
+              "body": "It's because of the `xml2rfc` tool again. It calls everything a \"figure\".",
+              "createdAt": "2020-12-15T13:15:35Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUyNDM2Nzk3",
+          "commit": {
+            "abbreviatedOid": "24d64a0"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-15T13:15:47Z",
+          "updatedAt": "2020-12-15T13:15:47Z",
+          "comments": [
+            {
+              "originalPosition": 287,
+              "body": "See above.",
+              "createdAt": "2020-12-15T13:15:47Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUyNDM2ODg1",
+          "commit": {
+            "abbreviatedOid": "24d64a0"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-15T13:15:54Z",
+          "updatedAt": "2020-12-15T13:15:54Z",
+          "comments": [
+            {
+              "originalPosition": 311,
+              "body": "See above.",
+              "createdAt": "2020-12-15T13:15:54Z",
+              "updatedAt": "2020-12-16T07:25:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUzMzU4OTQ3",
+          "commit": {
+            "abbreviatedOid": "24d64a0"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-16T05:04:06Z",
+          "updatedAt": "2020-12-16T05:04:06Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 35,
@@ -3997,6 +4187,75 @@
           "body": "Thanks @lisongxu ",
           "createdAt": "2020-12-14T05:09:59Z",
           "updatedAt": "2020-12-14T05:09:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQxMjM0NTYx",
+      "title": "Address (some of) Lisong's review issues",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/36",
+      "state": "OPEN",
+      "author": "larseggert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-16T15:11:34Z",
+      "updatedAt": "2020-12-16T17:38:15Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "c6c2cbe8e1fe919ae4faeaca386b76ef1c72c668",
+      "headRepository": "NTAP/rfc8312bis",
+      "headRefName": "lisongs-issues",
+      "headRefOid": "6f6b794bf1d03b6eaf12d7e3be26f2af0248ff76",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@lisongxu do you have a suggestion for the one issue I didn't address yet?\r\n\r\n>>Section 4.2: the cwnds used in Figure 2 and target equation are two different cwnds. In figure 2, cwnd is the cwnd at the beginning of the current congestion avoidance stage. In target (should also be referred to as Figure x?), cwnd is the current actual cwnd at time t.\r\n\r\n> I need some help coming up with a solution to this one.",
+          "createdAt": "2020-12-16T15:31:08Z",
+          "updatedAt": "2020-12-16T15:31:08Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I will reply on github so that we can keep track of the discussions, Thanks\nLisong\n\n________________________________\nFrom: Lars Eggert <notifications@github.com>\nSent: Wednesday, December 16, 2020 9:31 AM\nTo: NTAP/rfc8312bis <rfc8312bis@noreply.github.com>\nCc: Lisong Xu <xu@unl.edu>; Mention <mention@noreply.github.com>\nSubject: Re: [NTAP/rfc8312bis] Address (some of) Lisong's review issues (#36)\n\n\n@lisongxu<https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_lisongxu&d=DwMCaQ&c=Cu5g146wZdoqVuKpTNsYHeFX_rg6kWhlkLF8Eft-wwo&r=8GgbmpxpPRnPS9z8_jUQhw&m=5KC63MXbfmYPOr1W6jy-0tNqLOzjPAJcFZfJC1znE48&s=3jVg2QE_Z_PXHBoRGZ9ha4-rRZmJsmIe_7zqAHb8Cpk&e=> do you have a suggestion for the one issue I didn't address yet?\n\nSection 4.2: the cwnds used in Figure 2 and target equation are two different cwnds. In figure 2, cwnd is the cwnd at the beginning of the current congestion avoidance stage. In target (should also be referred to as Figure x?), cwnd is the current actual cwnd at time t.\n\nI need some help coming up with a solution to this one.\n\n\u2014\nYou are receiving this because you were mentioned.\nReply to this email directly, view it on GitHub<https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_NTAP_rfc8312bis_pull_36-23issuecomment-2D746479864&d=DwMCaQ&c=Cu5g146wZdoqVuKpTNsYHeFX_rg6kWhlkLF8Eft-wwo&r=8GgbmpxpPRnPS9z8_jUQhw&m=5KC63MXbfmYPOr1W6jy-0tNqLOzjPAJcFZfJC1znE48&s=3yQJdHKhz17Jc-B6fJOBgP-9GZ0DxIhQ-4AqxaH6cEQ&e=>, or unsubscribe<https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_notifications_unsubscribe-2Dauth_ACPRVIPQDNADZJBLBOQBTQDSVDHEZANCNFSM4U6EJ7FA&d=DwMCaQ&c=Cu5g146wZdoqVuKpTNsYHeFX_rg6kWhlkLF8Eft-wwo&r=8GgbmpxpPRnPS9z8_jUQhw&m=5KC63MXbfmYPOr1W6jy-0tNqLOzjPAJcFZfJC1znE48&s=mtT4P_TIQIogZkJbYcWKBoEx5AjFcA3VmBp8uhcJKSE&e=>.\n",
+          "createdAt": "2020-12-16T15:32:52Z",
+          "updatedAt": "2020-12-16T15:32:52Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @lisongxu do you have a suggestion for the one issue I didn't address yet?\r\n> \r\n> > > Section 4.2: the cwnds used in Figure 2 and target equation are two different cwnds. In figure 2, cwnd is the cwnd at the beginning of the current congestion avoidance stage. In target (should also be referred to as Figure x?), cwnd is the current actual cwnd at time t.\r\n> \r\n> > I need some help coming up with a solution to this one.\r\n\r\nBecause cwnd refers to the current cwnd in the whole RFC, except the cwnd in Figure 2. How about we define a new variable cwnd_{start} for just figure/equation 2 as we have discussed before?\r\n\r\nThat is, we change figure/equation 2 as follows, and replace all cwnd in the paragraph immediately below figure/equation 2 with cwnd_{start}.\r\n\r\nK = \\sqrt[3]{\\frac{W_{max} - cwnd_{start}}{C}}\r\n\r\nUpdate other sections accordingly as follow\r\n\r\nIn Section \"Variables of interest\", we add \"cwnd_{start}: The cwnd at the beginning of the current congestion avoidance stage (i.e., at time epoch_{start})\"\r\n\r\nThanks\r\n\r\n\r\n\r\n",
+          "createdAt": "2020-12-16T15:41:04Z",
+          "updatedAt": "2020-12-16T15:41:04Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks, I will make that change tomorrow and you guys can review after.",
+          "createdAt": "2020-12-16T17:38:15Z",
+          "updatedAt": "2020-12-16T17:38:15Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUzODAxOTk1",
+          "commit": {
+            "abbreviatedOid": "6f6b794"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks, Lars",
+          "createdAt": "2020-12-16T15:29:03Z",
+          "updatedAt": "2020-12-16T15:29:03Z",
           "comments": []
         }
       ]
